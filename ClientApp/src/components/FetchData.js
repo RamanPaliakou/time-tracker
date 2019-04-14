@@ -5,13 +5,18 @@ export class FetchData extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { forecasts: [], loading: true };
+    this.state = {
+      forecasts: [],
+      loading: true,
+      line: ""
+    };
 
     fetch('api/SampleData/WeatherForecasts')
       .then(response => response.json())
       .then(data => {
         this.setState({ forecasts: data, loading: false });
       });
+
   }
 
   static renderForecastsTable(forecasts) {
@@ -39,6 +44,15 @@ export class FetchData extends Component {
     );
   }
 
+  doApiGetRequest = () => {
+    fetch('api/SampleData/TestRequestGet')
+      .then(response =>  {return response.json()})
+      .then(data => {console.log(data); return data})
+      .then( data => {
+        this.setState({line: data.line})
+      });
+  }
+
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
@@ -49,6 +63,9 @@ export class FetchData extends Component {
         <h1>Weather forecast</h1>
         <p>This component demonstrates fetching data from the server.</p>
         {contents}
+        <h2>Here then some test requests</h2>
+        <button onClick={this.doApiGetRequest}>Do test get request</button>
+        <p>{this.state.line}</p>
       </div>
     );
   }
