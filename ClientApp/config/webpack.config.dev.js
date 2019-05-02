@@ -10,6 +10,35 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
+const CSSModuleLoader = {
+  loader: 'css-loader',
+  options: {
+    modules: true,
+    sourceMap: true,
+    localIdentName: '[local]__[hash:base64:5]',
+    minimize: true
+  }
+}
+const CSSLoader = {
+  loader: 'css-loader',
+  options: {
+    modules: true,
+    sourceMap: true,
+    minimize: true
+  }
+}
+const postCSSLoader = {
+  loader: 'postcss-loader',
+  options: {
+    ident: 'postcss',
+    sourceMap: true,
+    plugins: () => [
+      autoprefixer({
+        browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9']
+      })
+    ]
+  }
+}
 const paths = require('./paths');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -151,6 +180,20 @@ module.exports = {
               cacheDirectory: true,
             },
           },
+          {
+            test: /\.scss$/,
+            exclude: /\.module\.scss$/,
+            use: ['style-loader', CSSLoader, postCSSLoader, 'sass-loader']
+          },
+          {
+            test: /\.module\.scss$/,
+            use: [
+              'style-loader',
+              CSSModuleLoader,
+              postCSSLoader,
+              'sass-loader',
+            ]
+          },
           // "postcss" loader applies autoprefixer to our CSS.
           // "css" loader resolves paths in CSS and adds assets as dependencies.
           // "style" loader turns CSS into JS modules that inject <style> tags.
@@ -164,6 +207,10 @@ module.exports = {
                 loader: require.resolve('css-loader'),
                 options: {
                   importLoaders: 1,
+                  modules: true,
+                  localIdentName: '[name]__[local]__[hash:base64:5]',
+                  minimize: true,
+                  sourceMap: true,
                 },
               },
               {
