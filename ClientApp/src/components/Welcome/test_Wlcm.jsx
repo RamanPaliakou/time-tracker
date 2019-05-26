@@ -1,5 +1,4 @@
 import React, { Component, PureComponent } from 'react';
-import { Button, Collapse, Paper, Card, CardTitle, CardText } from 'react-md';
 import styles from './Welcome.sass';
 import { empireLogo } from './empire.png'
 class Welcome extends React.PureComponent {
