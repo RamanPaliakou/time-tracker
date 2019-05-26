@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { Col, Grid, Row } from 'react-bootstrap';
-import { NavMenu } from './NavMenu';
 import styles from './Layout.sass';
 
-export class Layout extends Component {
+class Layout extends Component {
   displayName = Layout.name
 
   render() {
@@ -14,3 +12,5 @@ export class Layout extends Component {
     );
   }
 }
+
+export default Layout;
