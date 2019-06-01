@@ -1,6 +1,26 @@
 import React, { Component, PureComponent } from "react";
 import { Button } from "@material-ui/core/";
+import { withStyles } from '@material-ui/core/styles';
 import MediaQuery from "react-responsive";
+
+const styles = (theme) => {
+  const unit = theme.spacing.unit;
+  return {
+    right: {
+      borderTopRightRadius: 0,
+      borderTopLeftRadius: 0,
+      borderBottomLeftRadius: 0,
+    },
+    left: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      borderBottomRightRadius: 0,
+    },
+    middle : {
+      borderRadius: 0,
+    }
+  };
+}
 
 class HorizontalMenuButton extends Component {
   constructor(props) {
@@ -32,9 +52,20 @@ class HorizontalMenuButton extends Component {
   }
 
   render() {
+    const { classes } = this.props;
+
+    const className = () => {
+      if (typeof this.props.align == undefined) return {};
+      return (this.props.align === 'left')
+        ? classes.left
+        : (this.props.align === 'right')
+          ? classes.right
+          : classes.middle;
+    }
+
     return (
-      <Button style={{ width: "100%", fontSize: 'inherit' }}
-        color={this.color()} variant = {this.variant()}
+      <Button className={className()} style={{ width: "100%", fontSize: 'inherit' }}
+        color={this.color()} variant={this.variant()}
         onClick={this.props.onClick}>
 
         <MediaQuery minWidth={this.props.queryWidth + 1} children={
@@ -45,7 +76,6 @@ class HorizontalMenuButton extends Component {
 
       </Button>
     );
-  }
-};
-
-export default HorizontalMenuButton;
+  };
+}
+export default withStyles(styles)(HorizontalMenuButton);

@@ -12,17 +12,20 @@ import { Paper, Grid, IconButton } from '@material-ui/core/';
 const styles = (theme) => {
   const unit = theme.spacing.unit;
   return {
+    paper: {
+      borderBottomRightRadius: 0,
+      borderBottomLeftRadius: 0,
+    },
     avatar: {
       height: 150,
       width: 150,
       border: '2px solid gray',
-      // float: 'right',
-      position: 'absoulte', 
+      position: 'absoulte',
       right: -15
     },
     logOutButton: {
       background: 'rgba(255, 255, 255, 0.5)',
-      
+
     },
     patternBox: {
       width: 'inherit',
@@ -48,24 +51,24 @@ class AvatarPanel extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid container
-        style={{ backgroundImage: this.props.patternImage }}
-        justify='flex-end' direction='row' alignItems='flex-end' wrap="nowrap">
-        <Grid item children={
-          <Avatar
-            alt={this.props.alt}
-            src={this.props.avatarImage}
-            className={classes.avatar}
-          />}
-        />
+      <Paper className = {classes.paper}>
+        <Grid container
+          style={{ backgroundImage: this.props.patternImage }}
+          justify='flex-end' direction='row' alignItems='flex-end' wrap="nowrap">
+          <Grid item children={
+            <Avatar className={classes.avatar}
+              src={this.props.avatarImage} alt={this.props.alt}
+            />}  
+          />
 
-        <Grid item children={
-          <IconButton color='primary' classes={{root: classes.logOutButton}} styles={{position: 'absoulte', top:'auto', right: 0}}>
-            <ExitToAppOutlined size="small" style={{ fontSize: 20}} />
-          </IconButton>}
-        />
+          <Grid item children={
+            <IconButton color='primary' classes={{ root: classes.logOutButton }} styles={{ position: 'absoulte', top: 'auto', right: 0 }}>
+              <ExitToAppOutlined size="small" style={{ fontSize: 20 }} />
+            </IconButton>}
+          />
 
-      </Grid>
+        </Grid>
+      </Paper>
     );
   }
 }

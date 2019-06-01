@@ -1,8 +1,8 @@
 const constants  = {
-    marginHome: 2,
+    marginHome: 70,
     minAppWidth: 250,
     defaultFontSize: 15,
-    menuFontSize: 16,
+    menuFontSize: 14,
     applySmallWidth: 640
 }
 

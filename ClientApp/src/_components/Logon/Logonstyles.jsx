@@ -2,9 +2,9 @@ const styles = function (theme) {
     let unit = theme.spacing.unit;
     return {
         layoutContainer: {
-            width: '60%',
+            width: '80%',
             minWidth: '200px',
-            maxWidth: '500px',
+            maxWidth: 400,
             margin: '0 auto',
             marginTop: '50px'
         },
