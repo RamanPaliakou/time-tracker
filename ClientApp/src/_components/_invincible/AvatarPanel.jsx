@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
-import constants from '../../_resources/Constants/Constants'
+import constants from '../../_resources/Constants/Constants';
+import Icon from '@material-ui/core/Icon';
+import { Fab } from '@material-ui/core';
+import ExitToAppOutlined from '@material-ui/icons/ExitToAppOutlined';
+import { Paper, Grid, IconButton } from '@material-ui/core/';
+
 
 const styles = (theme) => {
   const unit = theme.spacing.unit;
@@ -12,11 +17,16 @@ const styles = (theme) => {
       width: 150,
       border: '2px solid gray',
       // float: 'right',
+      position: 'absoulte', 
+      right: -15
+    },
+    logOutButton: {
+      background: 'rgba(255, 255, 255, 0.5)',
+      
     },
     patternBox: {
-      margin: constants.marginHome,
       width: 'inherit',
-      minWidth: 200,
+      minWidth: constants.minAppWidth,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-end',
@@ -38,13 +48,24 @@ class AvatarPanel extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.patternBox} style={{ backgroundImage: this.props.patternImage }}>
-        <Avatar
-          alt={this.props.alt}
-          src={this.props.avatarImage}
-          className={classes.avatar}
+      <Grid container
+        style={{ backgroundImage: this.props.patternImage }}
+        justify='flex-end' direction='row' alignItems='flex-end' wrap="nowrap">
+        <Grid item children={
+          <Avatar
+            alt={this.props.alt}
+            src={this.props.avatarImage}
+            className={classes.avatar}
+          />}
         />
-      </div>
+
+        <Grid item children={
+          <IconButton color='primary' classes={{root: classes.logOutButton}} styles={{position: 'absoulte', top:'auto', right: 0}}>
+            <ExitToAppOutlined size="small" style={{ fontSize: 20}} />
+          </IconButton>}
+        />
+
+      </Grid>
     );
   }
 }

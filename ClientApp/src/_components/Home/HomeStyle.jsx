@@ -1,3 +1,5 @@
+import constants from "../../_resources/Constants/Constants";
+
 const styles = (theme) => {
   const { unit } = theme.spacing;
   return {
@@ -43,7 +45,12 @@ const styles = (theme) => {
       display: 'inline-block',
       height: '100%',
     },
+    ComponentContainer :{
+      minWidth: constants.minAppWidth,
+      paddingLeft: constants.marginHome,
+      paddingRight: constants.marginHome,
+    }
   };
 };
 
-export default styles;
+export { styles };
