@@ -27,20 +27,21 @@ const styles = function (theme) {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
-            //width: '100%',
             height: '90px',
 
         },
         standartInput: {
-            width: '100%',
+            width: '95%',
         },
         password: {
-            width: '100%',
+            width: '95%',
+            height: '30px'
         },
         loginButton: {
-            width: '100%',
+            width: '95%',
             textTransform: 'none',
-            color: '#fff'
+            color: '#fff',
+            margin: '20px 0  20px 0'
         },
         smallTextLink: {
             textTransform: 'none',

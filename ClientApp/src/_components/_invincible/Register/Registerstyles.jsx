@@ -2,10 +2,11 @@ const styles = function (theme) {
     let unit = theme.spacing.unit;
     return {
         standartInput: {
-            width: '100%',
+            width: '95%',
         },
         password: {
-            width: '100%',
+            width: '95%',
+            height: '30px'
         },
         loginButton: {
             width: '100%',

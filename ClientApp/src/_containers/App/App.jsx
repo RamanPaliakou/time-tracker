@@ -4,7 +4,7 @@ import Layout  from '../../_components/Layout/Layout';
 import Logon  from '../../_components/Logon/Logon';
 import Login  from '../../_components/_invincible/Login/Login';
 import Register  from '../../_components/_invincible/Register/Register';
-
+import Home from '../../_components/Home/Home'
 
 // class LoginWrapper extends PureComponent
 // {
@@ -42,6 +42,8 @@ class App extends PureComponent {
   render() {
     return (
       <Layout>
+          <Route  path='/home' render={()=> (<Home />)}  />
+
           <Route  path='/login' render={()=> (
             <Logon alternativeDescription="Don't have an account?" alternativeLink="/register" alternativeClickText="Register"
               children= { <Login/>}/>)}  />

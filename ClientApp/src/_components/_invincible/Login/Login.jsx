@@ -57,11 +57,11 @@ class LoginArea extends React.Component {
                         onChange={this.handleChange('password')}
                         
                         endAdornment={
-                            <InputAdornment position="end"
+                            <InputAdornment position="end" 
                                 children = {
-                                    <IconButton onClick={this.handleClickShowPassword} onMouseDown={this.handleMouseDownPassword}>
-                                        {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
+                                    <Button className={classes.passwordShowButton} onClick={this.handleClickShowPassword} onMouseDown={this.handleMouseDownPassword}>
+                                       {!this.state.showPassword ? 'SHOW' : 'HIDE'}{/* {this.state.showPassword ? <VisibilityOff /> : <Visibility />} */}
+                                    </Button>
                             }/>
                         }
                     />

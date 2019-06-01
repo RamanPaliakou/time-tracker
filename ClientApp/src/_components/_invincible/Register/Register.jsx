@@ -77,9 +77,9 @@ class RegisterArea extends React.Component {
                             endAdornment={
                                 <InputAdornment position="end" 
                                     children = {
-                                        <IconButton aria-label="Toggle password visibility" onClick={this.handleClickShowPassword} onMouseDown={this.handleMouseDownPassword}>
-                                            {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>}
+                                        <Button aria-label="Toggle password visibility" onClick={this.handleClickShowPassword} onMouseDown={this.handleMouseDownPassword}>
+                                            {!this.state.showPassword ? 'SHOW' : 'HIDE'}{/* {this.state.showPassword ? <VisibilityOff /> : <Visibility />} */}
+                                        </Button>}
                                 />
                             }/>}
                 />

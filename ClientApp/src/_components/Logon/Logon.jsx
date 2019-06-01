@@ -27,7 +27,7 @@ class Logon extends PureComponent
                                             <img src = {empire} className={classes.logo}/>}
                                     />
                                     <Grid item
-                                    children ={this.props.children}
+                                        children ={this.props.children}
                                     />
                                     
                                 </Grid>
