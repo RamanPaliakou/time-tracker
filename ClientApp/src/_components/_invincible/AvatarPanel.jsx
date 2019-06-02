@@ -15,6 +15,7 @@ const styles = (theme) => {
     paper: {
       borderBottomRightRadius: 0,
       borderBottomLeftRadius: 0,
+      minWidth: constants.minAppWidth,
     },
     avatar: {
       height: 150,

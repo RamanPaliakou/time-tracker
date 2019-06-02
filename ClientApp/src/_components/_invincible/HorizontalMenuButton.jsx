@@ -16,7 +16,7 @@ const styles = (theme) => {
       borderTopRightRadius: 0,
       borderBottomRightRadius: 0,
     },
-    middle : {
+    center: {
       borderRadius: 0,
     }
   };
@@ -26,46 +26,31 @@ class HorizontalMenuButton extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      buttonActiveColor: 'primary',
       buttonColor: 'default',
+      align: (typeof (this.props.align) !== undefined)
+        ? this.props.align
+        : {}
     };
   };
 
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.activeColor !== undefined) {
-      this.setState({ buttonColor: nextProps.activeColor });
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (typeof (nextProps.activeColor) !== undefined) {
+      if (this.props.buttonActiveColor !== nextProps.buttonActiveColor)
+        nextState = { ...nextState, buttonActiveColor: nextProps.buttonActiveColor };
     }
-    else {
-      this.setState({ buttonColor: 'primary' });
-    }
+    else nextState = { ...nextState, buttonActiveColor: 'primary' };
+
+    return true;
   }
 
-  color = () => {
-    return this.props.isSelected
-      ? this.state.buttonColor
-      : 'default'
-  }
-
-  variant = () => {
-    return this.props.isSelected
-      ? 'contained'
-      : 'default'
-  }
-
-  render() {
-    const { classes } = this.props;
-
-    const className = () => {
-      if (typeof this.props.align == undefined) return {};
-      return (this.props.align === 'left')
-        ? classes.left
-        : (this.props.align === 'right')
-          ? classes.right
-          : classes.middle;
-    }
-
+  render = () => {
+    const { classes, isSelected, align } = this.props;
+    const { buttonActiveColor, buttonColor } = this.state;
+    const className = classes[align];
     return (
-      <Button className={className()} style={{ width: "100%", fontSize: 'inherit' }}
-        color={this.color()} variant={this.variant()}
+      <Button className={className}
+        style={{ width: "100%", fontSize: 'inherit' }} variant={isSelected ? 'contained' : 'buttonColor'} color={isSelected ? buttonActiveColor : buttonColor}
         onClick={this.props.onClick}>
 
         <MediaQuery minWidth={this.props.queryWidth + 1} children={

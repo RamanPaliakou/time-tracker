@@ -1,9 +1,10 @@
 const constants  = {
-    marginHome: 70,
+    sidePadding: 70,
     minAppWidth: 250,
     defaultFontSize: 15,
     menuFontSize: 14,
-    applySmallWidth: 640
+    applySmallWidth: 767,
+    applySidePaddings: 400
 }
 
 export default constants;

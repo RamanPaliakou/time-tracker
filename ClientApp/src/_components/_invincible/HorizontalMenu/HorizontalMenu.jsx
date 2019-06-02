@@ -40,15 +40,15 @@ class HorizontalMenu extends React.Component {
             onClick={this.handleClick(1)} align={'left'} />
           <HorizontalMenuButton queryWidth={collapseAt} isSelected={activeNumber === 2}
             ButtonText={'ACTIVE'} ButtonIconComponent={<WatchLaterOutlined />}
-            onClick={this.handleClick(2)} />
+            onClick={this.handleClick(2)} align={'center'}/>
           <HorizontalMenuButton queryWidth={collapseAt} isSelected={activeNumber === 3}
             ButtonText={'STATISTICS'} ButtonIconComponent={<TimelineOutlined />}
-            onClick={this.handleClick(3)} />
+            onClick={this.handleClick(3)} align={'center'}/>
           <HorizontalMenuButton queryWidth={collapseAt} isSelected={(activeNumber === 4)}
             ButtonText={'MANAGE PROFILE'} ButtonIconComponent={<PortraitOutlined />}
             onClick={this.handleClick(4)} align={'right'} />
         </Grid>
-        <Divider styles={{ borderBottom: '1px solid grey', margin: 0 }} />
+        {/* <Divider styles={{ borderBottom: '1px solid grey', margin: 0 }} /> */}
         {/* <CollapseSection/> */}
       </Paper>
     );

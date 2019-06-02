@@ -48,7 +48,6 @@ class CollapseSection extends PureComponent {
                     {this.props.children}
                 </Collapse>
                 <Button classes={{ root: classes.expandButton }} onClick={this.handleExpandClick}>
-                    additional
                     {this.state.collapsed 
                         ? <ExpandMoreOutlined classes={{ root: classes.expandLogo }} />
                         : <ExpandLessOutlined classes={{ root: classes.expandLogo }} />
