@@ -23,7 +23,6 @@ class App extends PureComponent {
         <Route path='/register' render={() => (
           <Logon alternativeDescription="Already have an account?" alternativeLink="/login" alternativeClickText="Login"
             children={<Register />} />)} />
-
       </Layout>
     );
   }

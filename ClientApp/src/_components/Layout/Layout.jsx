@@ -29,20 +29,16 @@ class Layout extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.Layout}>
-
         <MediaQuery maxWidth={constants.applySidePaddings}
-          children={
-            <div className={classes.resetSidePaddings}
-              children={this.props.children}
-            />}
+          children={this.props.children}
         />
         <MediaQuery minWidth={constants.applySidePaddings + 1}
           children={
             <div className={classes.applySidePaddings}
               children={this.props.children}
-            />}
+            />
+          }
         />
-
 
       </div>
     );

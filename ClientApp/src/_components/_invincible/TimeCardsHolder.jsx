@@ -14,15 +14,17 @@ const styles = (theme) => {
     return {
         container: {
             minWidth: constants.minAppWidth,
+            maxWidth: '100%',
             display: 'block',
             marginTop: unit,
             
         },
         elementStorage:{
+            maxWidth: '100%',
             display:'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            flexWrap: 'nowrap',
+            flexWrap: 'wrap',
             alignItems: 'center',
         },
         element:{
@@ -39,12 +41,9 @@ class TimeCardsHolder extends PureComponent {
         return (
             <div className={classes.container} >
                 <div className={classes.elementStorage}>
-                <Paper className={classes.element}>
-                    fdgsf
-                </Paper>
-                <TimeCard className={classes.element} />
-                <TimeCard className={classes.element} />
-                <TimeCard className={classes.element} />
+                <TimeCard  />
+                <TimeCard  />
+                <TimeCard />
             </div>
             </div>
         )

@@ -17,15 +17,12 @@ import constants from "../../_resources/Constants/Constants";
 const styles = (theme) => {
   const { unit } = theme.spacing;
   return {
- 
-    cardsContainer:{
+    cardsContainer: {
       border: '1px solid black !important',
       display: 'block'
     },
-    ComponentContainer :{
+    ComponentContainer: {
       minWidth: constants.minAppWidth,
-      paddingLeft: constants.marginHome,
-      paddingRight: constants.marginHome,
     }
   };
 };
@@ -56,8 +53,8 @@ class Home extends React.PureComponent {
         <HorizontalMenu />
         <TimeCardsHolder />
       </div>
-        );
-      }
-    }
-    
-    export default withStyles(styles)(Home);
+    );
+  }
+}
+
+export default withStyles(styles)(Home);
