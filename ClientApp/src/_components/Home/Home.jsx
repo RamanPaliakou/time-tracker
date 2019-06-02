@@ -13,6 +13,39 @@ import AvatarPanel from '../_invincible/AvatarPanel';
 import HorizontalMenu from '../_invincible/HorizontalMenu/HorizontalMenu';
 import TimeCardsHolder from '../_invincible/TimeCardsHolder';
 import constants from "../../_resources/Constants/Constants";
+import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
+import TimelineOutlined from '@material-ui/icons/TimelineOutlined';
+import PortraitOutlined from '@material-ui/icons/PortraitOutlined';
+import DoneAllOutlined from '@material-ui/icons/DoneAllOutlined';
+import Summary from '../_invincible/Summary';
+
+const HorizontalMenuFields =
+  [
+    {
+      text: 'COMPLETED',
+      callback: () => { },
+      iconComponent: <DoneAllOutlined />,
+      collapseAt: constants.applySmallWidth,
+    },
+    {
+      text: 'ACTIVE',
+      callback: () => { },
+      iconComponent: <WatchLaterOutlined />,
+      collapseAt: constants.applySmallWidth,
+    },
+    {
+      text: 'STATISTICS',
+      callback: () => { },
+      iconComponent: <TimelineOutlined />,
+      collapseAt: constants.applySmallWidth,
+    },
+    {
+      text: 'MANAGE PROFILE',
+      callback: () => { },
+      iconComponent: <PortraitOutlined />,
+      collapseAt: constants.applySmallWidth,
+    }
+  ];
 
 const styles = (theme) => {
   const { unit } = theme.spacing;
@@ -50,7 +83,8 @@ class Home extends React.PureComponent {
           avatarImage="https://cdn0.iconfinder.com/data/icons/iconshock_guys/512/andrew.png"
           patternImage={'url("https://img14.postila.ru/resize?w=660&src=%2Fdata%2F34%2F84%2F33%2Fa8%2F348433a8e32ac170a83318d5b957bfb094c936bccf75a66e21d6561a4122d843.png")'}
         />
-        <HorizontalMenu />
+        <HorizontalMenu buttonsArray={HorizontalMenuFields} customHeight={40} customFontSize={17} />
+        
         <TimeCardsHolder />
       </div>
     );

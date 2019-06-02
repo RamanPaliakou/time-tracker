@@ -1,52 +1,53 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles/index';
 import { Paper, Grid, Divider, Button, Input } from '@material-ui/core/';
-import DoneAllOutlined from '@material-ui/icons/DoneAllOutlined';
-import HorizontalMenuButton from '../HorizontalMenuButton';
-import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
-import TimelineOutlined from '@material-ui/icons/TimelineOutlined';
-import PortraitOutlined from '@material-ui/icons/PortraitOutlined';
 import { styles } from './HorizontalMenuStyles';
+import HorizontalMenuButton from '../HorizontalMenuButton';
 import constants from '../../../_resources/Constants/Constants';
+import PropTypes from 'prop-types';
 // import CollapseSection from '../CollapseSection';
 
-class HorizontalMenu extends React.Component {
+class HorizontalMenu extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      buttonSelected: 0
+      buttonSelected: 0,
+      height: props.customHeight || 'unset',
+      fontSize: props.customFontSize || 'unset',
+      textTransform: props.textTransform || 'unset',
+      enableSelection: (typeof (props.enableSelection !== undefined) ? (props.enableSelection === false ? false : true) : true),
     };
   }
 
-  handleClick = (number) => () => {
+
+  handleClick = (number, callback) => () => {
     this.setState({ buttonSelected: number });
-    console.log('handle button click');
+    callback();
   };
 
   render() {
     const { classes } = this.props;
+    const { height, fontSize, textTransform, enableSelection } = this.state;
     const activeNumber = this.state.buttonSelected;
-    const collapseAt = constants.applySmallWidth;
-    console.log('rendring horizontal menu');
-    console.log(this.state);
-
+ 
     return (
       <Paper className={classes.backPaper}>
         <Grid container className={classes.menuElementsContainer}
           justify='center' direction='row' alignContent='center' wrap="nowrap"
         >
-          <HorizontalMenuButton queryWidth={collapseAt} isSelected={(activeNumber === 1)}
-            ButtonText={'COMPLETED'} ButtonIconComponent={<DoneAllOutlined />}
-            onClick={this.handleClick(1)} align={'left'} />
-          <HorizontalMenuButton queryWidth={collapseAt} isSelected={activeNumber === 2}
-            ButtonText={'ACTIVE'} ButtonIconComponent={<WatchLaterOutlined />}
-            onClick={this.handleClick(2)} align={'center'}/>
-          <HorizontalMenuButton queryWidth={collapseAt} isSelected={activeNumber === 3}
-            ButtonText={'STATISTICS'} ButtonIconComponent={<TimelineOutlined />}
-            onClick={this.handleClick(3)} align={'center'}/>
-          <HorizontalMenuButton queryWidth={collapseAt} isSelected={(activeNumber === 4)}
-            ButtonText={'MANAGE PROFILE'} ButtonIconComponent={<PortraitOutlined />}
-            onClick={this.handleClick(4)} align={'right'} />
+          {
+            this.props.buttonsArray.map(b => {
+              const i = Array.prototype.indexOf.call(this.props.buttonsArray, b);
+              const l = this.props.buttonsArray.length - 1;
+              return (
+                <HorizontalMenuButton collapseAt={b.collapseAt} isSelected={enableSelection && (activeNumber === i)}
+                  ButtonText={b.text} ButtonIconComponent={b.iconComponent}
+                  customHeight={height} customFontSize={fontSize} textTransform={textTransform}
+                  onClick={this.handleClick(i, b.callback)} align={i === 0 ? 'left' : (i === l ? 'right' : 'center')}
+                />)
+            })
+          }
+
         </Grid>
         {/* <Divider styles={{ borderBottom: '1px solid grey', margin: 0 }} /> */}
         {/* <CollapseSection/> */}

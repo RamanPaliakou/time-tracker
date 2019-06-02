@@ -7,16 +7,19 @@ const styles = (theme) => {
   const unit = theme.spacing.unit;
   return {
     right: {
+      padding:0,
       borderTopRightRadius: 0,
       borderTopLeftRadius: 0,
       borderBottomLeftRadius: 0,
     },
     left: {
+      padding:0,
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
       borderBottomRightRadius: 0,
     },
     center: {
+      padding:0,
       borderRadius: 0,
     }
   };
@@ -28,9 +31,10 @@ class HorizontalMenuButton extends Component {
     this.state = {
       buttonActiveColor: 'primary',
       buttonColor: 'default',
-      align: (typeof (this.props.align) !== undefined)
-        ? this.props.align
-        : {}
+      align: props.align || {},
+      fontSize: props.customFontSize || 'unset',
+      height: props.customHeight || 'unset',
+      textTransform:  props.textTransform || 'unset'
     };
   };
 
@@ -46,18 +50,18 @@ class HorizontalMenuButton extends Component {
 
   render = () => {
     const { classes, isSelected, align } = this.props;
-    const { buttonActiveColor, buttonColor } = this.state;
+    const { buttonActiveColor, buttonColor, fontSize, height, textTransform } = this.state;
     const className = classes[align];
     return (
-      <Button className={className}
-        style={{ width: "100%", fontSize: 'inherit' }} variant={isSelected ? 'contained' : 'buttonColor'} color={isSelected ? buttonActiveColor : buttonColor}
+      <Button  className={className}
+        style={{ width: "100%", height: height, fontSize: fontSize, textTransform: textTransform }} variant={isSelected ? 'contained' : 'buttonColor'} color={isSelected ? buttonActiveColor : buttonColor}
         onClick={this.props.onClick}>
 
-        <MediaQuery minWidth={this.props.queryWidth + 1} children={
+        <MediaQuery minWidth={this.props.collapseAt + 1} children={
           this.props.ButtonText} />
 
-        <MediaQuery maxWidth={this.props.queryWidth} children={
-          this.props.ButtonIconComponent} />
+        <MediaQuery maxWidth={this.props.collapseAt} children={
+          this.props.ButtonIconComponent } />
 
       </Button>
     );

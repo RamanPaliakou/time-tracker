@@ -9,12 +9,12 @@ import Icon from '@material-ui/core/Icon';
 import { Divider } from '@material-ui/core';
 import ExitToAppOutlined from '@material-ui/icons/ExitToAppOutlined';
 import { Paper, Button, Grid, IconButton } from '@material-ui/core/';
-// import { styles } from './TimeCardStyles';
+import { styles } from './TimeCardStyles';
 import Typography from '@material-ui/core/Typography';
 import HourglassEmptyTwoTone from '@material-ui/icons/HourglassEmptyTwoTone';
 import CheckCircleOutlineTwoTone from '@material-ui/icons/CheckCircleOutlineTwoTone';
 import AlarmOffTwoTone from '@material-ui/icons/AlarmOffTwoTone';
-import ExpandMoreOutlined from '@material-ui/icons/ExpandMoreOutlined';
+import PortraitOutlined from '@material-ui/icons/PortraitOutlined';
 import ExpandLessOutlined from '@material-ui/icons/ExpandLessOutlined';
 import SwipeableViews from 'react-swipeable-views';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -23,72 +23,13 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import ScrollableLine from '../ScrollableLine';
 import constants from '../../../_resources/Constants/Constants';
-
-
-const styles = (theme) => {
-  const unit = theme.spacing.unit;
-  return {
-    paper: {
-      maxWidth: 550,
-      width: '100%',
-      minWidth: constants.minAppWidth,
-      height: 80
-    },
-    formatContent: {
-      minWidth: constants.minAppWidth,
-      maxWidth: 'inherit',
-      maxHeight: 'inherit',
-      boxSizing: 'border-box',
-
-      padding: unit,
-      margin: 0,
-
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 0,
-
-      display: 'flex',
-      flexDirection: 'row',
-      flexWrap: 'nowrap',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-
-    contentArea: {
-      maxWidth: '99%',
-      minWidth: 200,
-      maxHeight: '-webkit-fill-available',
-      boxSizing: 'borderBox',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'stretch',
-      wrap: 'nowrap',
-      position: 'relative'
-    },
-    statusIcon: {
-      height: 40,
-      width: 40,
-      border: '2px solid gray',
-    },
-    divider: {
-      borderLeft: '1px solid grey',
-      height: '40px',
-      width: 2,
-      margin: '0 3px 0 3px'
-    },
-    test: {
-      width: '100%'
-    },
-    title: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      height: 60
-    }
-
-  };
-};
+import HorizontalMenu from '../HorizontalMenu/HorizontalMenu';
+import ArrowRight from '@material-ui/icons/ArrowRight';
+import ArrowLeft from '@material-ui/icons/ArrowLeft';
+import FlightTakeoff from '@material-ui/icons/FlightTakeoff';
+import FlightLand from '@material-ui/icons/FlightLand';
+import Delete from '@material-ui/icons/Delete';
+import Summary from '../Summary';
 
 const Description = (props) => {
   return (
@@ -105,10 +46,29 @@ class TimeCard extends Component {
     this.state = {
       title: 'Title',
       status: 'inProgress',
-      description: 'Description goes here'
+      description: 'Description goes here',
+      value: 0,
+      initialDate: new Date()
     };
   }
 
+  increaseChange = () => {
+    if (this.state.value === 1)
+      this.setState({ value: 0 })
+    else
+      this.setState({ value: this.state.value + 1 })
+  }
+
+  dereaseChange = () => {
+    if (this.state.value === 0)
+      this.setState({ value: 1 })
+    else
+      this.setState({ value: this.state.value - 1 })
+  }
+  donothing = () => { console.log('donothing') }
+  getTime = () => {
+
+  }
   Icon = {
     inProgress: <HourglassEmptyTwoTone />,
     completed: <CheckCircleOutlineTwoTone />,
@@ -128,22 +88,69 @@ class TimeCard extends Component {
 
   render() {
     const { classes } = this.props;
-    const {title, description, status} = this.state;
-    
+    const { title, description, status } = this.state;
+    const donothing = this.donothing;
+
+    const HorizontalMenuFields =
+      [
+        {
+          text: 'back',
+          callback: this.dereaseChange,
+          iconComponent: <ArrowLeft />,
+          collapseAt: constants.applySmallWidth,
+        },
+        {
+          text: 'start',
+          callback: donothing,
+          iconComponent: <FlightTakeoff />,
+          collapseAt: constants.applySmallWidth,
+        },
+        {
+          text: 'delete',
+          callback: donothing,
+          iconComponent: <Delete />,
+          collapseAt: constants.applySmallWidth,
+        },
+        {
+          text: 'complete',
+          callback: donothing,
+          iconComponent: <FlightLand />,
+          collapseAt: constants.applySmallWidth,
+        },
+        {
+          text: 'forward',
+          callback: this.increaseChange,
+          iconComponent: <ArrowRight />,
+          collapseAt: constants.applySmallWidth,
+        }
+      ];
+
     return (
+      
       <Paper className={classes.paper}>
-        <div className={classes.formatContent}>
-          <Avatar className={classes.statusIcon}>
-            {this.Icon[status]}
-          </Avatar>
-          <div className={classes.divider} />
-          <div className={classes.contentArea}>
-            <ScrollableLine
-              ElementOne={<this.Title title={title}/>}
-              ElementTwo={<Description description={description}/>}
-              ElementThree={<div><HourglassEmptyTwoTone /><CheckCircleOutlineTwoTone /><AlarmOffTwoTone /></div>}
-            />
+        <div className={classes.formatPaper}>
+
+          <div className={classes.formatViewData}>
+            <Avatar className={classes.statusIcon} children={
+              this.Icon[status]} />
+
+            <div className={classes.divider} />
+
+            <div className={classes.contentArea} children={
+              <SwipeableViews className={classes.swipeableViews} axis={'x'} index={this.state.value}>
+                <div className={classes.tabElement} children=
+                  {<this.Title title='Create a card title' />} />
+                <div className={classes.tabElement} children=
+                  {
+                    <Summary isActive = {(this.state.value === 1)} estimate={3} initialDate={this.state.initialDate} started={true} completed={false}/>
+                  } />
+              </SwipeableViews>
+            } />
+
           </div>
+
+          <HorizontalMenu className={classes.menu} buttonsArray={HorizontalMenuFields}
+            customHeight={22} customFontSize={7} textTransform={'lowercase'} enableSelection={false} />
         </div>
       </Paper >
 

@@ -10,24 +10,25 @@ const styles = (theme) => {
     return {
         container: {
             display: 'flex',
-            flexDirection: 'row',
+            flexDirection: 'column',
             flexWrap: 'nowrap',
             justifyContent: 'center',
             alignItems: 'stretch',
             width: '100%',
-            maxWidth:'inherit',
+            maxWidth: '500',
             height: 'inherit',
-            // border: '1px solid red'
+            border: '1px solid red',
+
         },
         expandButtonLeft: {
             margin: 0,
             padding: 0,
-            width: 15,
-            minWidth: 15,
-            display: 'block',
+            display: 'inline',
             borderTopRightRadius: 0,
             borderBottomRightRadius: 0,
-            textAlign: 'center'
+            textAlign: 'center',
+            height:15,
+            minHeight: 15
         },
         swipeableViews: {
             height: 'inherit',
@@ -36,20 +37,21 @@ const styles = (theme) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'stretch',
-            overflow:'hidden'
+            overflow: 'hidden'
         },
         expandButtonRight: {
             margin: 0,
+            textAlign:'right',
             padding: 0,
-            display: 'block',
+            display: 'inline',
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
-            width: 15,
-            minWidth: 15,
-            textAlign: 'center'
+            textAlign: 'center',
+            height:15,
+            minHeight: 15
         },
         expandLogo: {
-            margin: 'auto 0',
+            margin: '0 auto',
             height: 'inherit',
             maxHeight: '100%',
             padding: 0,
@@ -63,6 +65,11 @@ const styles = (theme) => {
             display: 'inline',
             margin: 0,
         },
+        buttonStorage:{
+            display: 'flex',
+            flexDirection:'row',
+            alignItems:'stretch'
+        }
     };
 };
 
@@ -96,10 +103,7 @@ class ScrollableLine extends Component {
         const { classes } = this.props;
         return (
             <div className={classes.container}>
-                <Button className={classes.expandButtonLeft} variant={'contained'}
-                    onClick={this.dereaseChange} children={
-                        <ArrowLeft className={classes.expandLogo} />}
-                />
+
                 <SwipeableViews className={classes.swipeableViews} axis={'x'} index={this.state.value}>
                     <div className={classes.tabElement}>
                         {this.props.ElementOne}
@@ -111,10 +115,17 @@ class ScrollableLine extends Component {
                         {this.props.ElementThree}
                     </div>
                 </SwipeableViews>
-                <Button classes={{ root: classes.expandButtonRight }} variant={'contained'}
-                    onClick={this.increaseChange} children={
-                        <ArrowRight classes={{ root: classes.expandLogo }} />}
-                />
+                <div className={classes.buttonStorage}>
+                    <Button className={classes.expandButtonLeft} variant={'contained'}
+                        onClick={this.dereaseChange} children={
+                            <ArrowLeft className={classes.expandLogo} />}
+                    />
+                    <Button classes={{ root: classes.expandButtonRight }} variant={'contained'}
+                        onClick={this.increaseChange} children={
+                            <ArrowRight classes={{ root: classes.expandLogo }} />}
+                    />
+                </div>
+
             </div>
         )
 
