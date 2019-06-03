@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import { styles } from './TimeCardStyles';
 import Typography from '@material-ui/core/Typography';
-import createTimeDiferenceFunction from '../../_resources/Helpers/TimeHelper'
+import createTimeDiferenceFunction from '../../_helpers/TimeHelper'
 
 class Summary extends Component {
     constructor(props) {

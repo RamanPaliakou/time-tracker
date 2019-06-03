@@ -19,8 +19,11 @@ import PortraitOutlined from '@material-ui/icons/PortraitOutlined';
 import DoneAllOutlined from '@material-ui/icons/DoneAllOutlined';
 import Summary from '../_invincible/Summary';
 import { styles } from './HomeStyles';
+import DiagramHolder from '../_invincible/DiagramHolder';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-class Home extends React.PureComponent {
+class HomePage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -77,11 +80,26 @@ class Home extends React.PureComponent {
 
         {(this.state.area === 'completed') && <TimeCardsHolder statusGroup='completed'/>}
         {(this.state.area === 'active') && <TimeCardsHolder statusGroup='active' addButton={true}/>}
-        {(this.state.area === 'statistics') && <span>Here goes statistics</span>}
+        {(this.state.area === 'statistics') &&  <DiagramHolder/>}
         {(this.state.area === 'profile') && <span>Here goes profile editor</span>}
+
+       
       </div>
     );
   }
 }
+
+
+function mapStateToProps(state) {
+  const { users, authentication } = state;
+  const { user } = authentication;
+  return {
+      user,
+      users
+  };
+}
+
+const Home = connect(mapStateToProps)(HomePage);
+
 
 export default withStyles(styles)(Home);

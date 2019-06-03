@@ -4,7 +4,7 @@ import TimeCard from './TimeCard/TimeCard';
 import constants from '../../_resources/Constants/Constants';
 import { statusGroups } from '../../_resources/Constants/StatusGroups';
 import spinner from '../../_resources/Images/spinner.gif'
-import { getTimeCards } from '../../_resources/Helpers/GetDataHelper';
+import { getTimeCards } from '../../_helpers/GetDataHelper';
 
 const styles = (theme) => {
     const unit = theme.spacing.unit;

@@ -1,4 +1,4 @@
-import { _timeCards } from '../../_mock/TimeCardData';
+import { _timeCards } from '../_mock/TimeCardData';
 
 const getTimeCards = (status) => new Promise((resolve, reject) => {
         console.log('status',status);

@@ -12,12 +12,12 @@ import constants from '../../../_resources/Constants/Constants';
 import HorizontalMenu from '../HorizontalMenu/HorizontalMenu';
 import ArrowRight from '@material-ui/icons/ArrowRight';
 import ArrowLeft from '@material-ui/icons/ArrowLeft';
-import FlightTakeoff from '@material-ui/icons/FlightTakeoff';
-import FlightLand from '@material-ui/icons/FlightLand';
+import Work from '@material-ui/icons/Work';
+import WorkOff from '@material-ui/icons/WorkOff';
 import DirectionsRun from '@material-ui/icons/DirectionsRun';
 import Delete from '@material-ui/icons/Delete';
 import Summary from '../Summary';
-import createCardCreationFunction from '../../../_resources/Helpers/TimeCardHelper';
+import createCardCreationFunction from '../../../_helpers/TimeCardHelper';
 
 class TimeCard extends Component {
   constructor(props) {
@@ -135,7 +135,7 @@ class TimeCard extends Component {
         {
           text: 'start',
           callback: this.startCard,
-          iconComponent: <FlightTakeoff />,
+          iconComponent: <Work />,
           collapseAt: constants.applySmallWidth,
         },
         {
@@ -147,7 +147,7 @@ class TimeCard extends Component {
         {
           text: 'complete',
           callback: this.completeCard,
-          iconComponent: <FlightLand />,
+          iconComponent: <WorkOff />,
           collapseAt: constants.applySmallWidth,
         },
         {
