@@ -2,63 +2,72 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import { styles } from './TimeCardStyles';
 import Typography from '@material-ui/core/Typography';
-
+import createTimeDiferenceFunction from '../../_resources/Helpers/TimeHelper'
 
 class Summary extends Component {
     constructor(props) {
         super(props);
         this.state = {
             currentDisplay: '0',
-            initialDate: this.props.initialDate || new Date(),
+            startedTime: this.props.startedTime || new Date().getTime(),
+            completed: (typeof props.completed !== "undefined") ? props.completed : false,
+            started: (typeof props.started !== "undefined") ? props.started : false,
+            estimate: (typeof props.estimate !== "undefined") ? props.estimate : 0,
+            isActive: props.isActive || false
         }
     }
     static propTypes = {
-        yearStarted: PropTypes.bool.isRequired,
         completed: PropTypes.bool.isRequired,
+        callbackTimePassed: PropTypes.func.isRequired,
+        timeSpent: PropTypes.number.isRequired,
+        estimate: PropTypes.number.isRequired
     };
 
     componentDidMount() {
-        this.interval = setInterval(() => {
-            let cr = new Date();
+        
+            this.interval = setInterval(() => {
+                let cr = new Date();
 
-            const diffTime = Math.abs(cr.getTime() - this.state.initialDate.getTime());
-            let diffSeconds = parseInt(diffTime / 1000);
-            let diffMinutes = parseInt(diffSeconds / 60);
-            let diffHours = parseInt(diffMinutes / 60);
-            let diffDays = parseInt(diffHours / 24);
+                const diffTime = Math.abs(cr.getTime() - this.props.startedTime);
+                const msToString = createTimeDiferenceFunction(diffTime);
 
-            diffSeconds = diffSeconds%60;
-            diffMinutes = diffMinutes%60;
-            diffHours = diffHours%24;
+                const cd = msToString();
 
-            var cd = '';
-            if (diffDays !== 0) {
-                cd += (diffDays + ' days ');
-            }
-            if (diffHours !== 0 ) {
-                cd += (diffHours + ' hours ');
-            }
-            if (diffMinutes !== 0 ) {
-                cd += (diffMinutes + ' minutes ');
-            }
-            cd += (diffSeconds + ' seconds');
-            this.setState({ currentDisplay: cd });
-        }, 500)
+                this.props.callbackTimePassed(diffTime)();
+                this.setState({ currentDisplay: cd });
+            }, 1000)
+        
     }
 
+    componentWillReceiveProps(nextProps) {
+        const newState = {
+            currentDisplay: this.state.currentDisplay,
+            startedTime: nextProps.startedTime || new Date().getTime(),
+            completed: (typeof nextProps.completed !== "undefined") ? nextProps.completed : this.state.completed,
+            started: (typeof nextProps.started !== "undefined") ? nextProps.started : this.state.started,
+            estimate: (typeof nextProps.estimate !== "undefined") ? nextProps.estimate : this.state.estimate,
+            isActive: nextProps.isActive || false
+        }
+        this.setState(newState);
+    }
+
+
     shouldComponentUpdate(nextProps, nextState) {
-        const value = nextProps.isActive && (nextProps.started || !nextProps.completed)
+        const value = this.state.isActive && (this.state.started && !this.state.completed)
         return value;
     }
 
     render() {
+        const { currentDisplay, completed, estimate } = this.state;
+        const { timeSpent } = this.props;
+        const estimatedTime = createTimeDiferenceFunction(estimate);
         return (
             <div className={this.props.summary} styles={{}} >
                 <Typography variant="h5" gutterBottom styles={{ margin: 'auto 0' }}>
-                    Estimated as: {this.props.estimate}
+                    Estimated as: {estimatedTime()}
                 </Typography>
                 <Typography variant="h5" gutterBottom styles={{ margin: 'auto 0' }}>
-                    Time Passed: {this.state.currentDisplay}
+                    Time Passed: {completed ? createTimeDiferenceFunction(timeSpent)() : currentDisplay}
                 </Typography>
             </div>
         )

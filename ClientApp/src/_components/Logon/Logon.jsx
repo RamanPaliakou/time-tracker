@@ -5,7 +5,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { PureComponent } from "react";
 import {styles} from './Logonstyles';
-import empire from '../../_resources/empire.png'
+import empire from '../../_resources/Images/empire.png'
 
 class Logon extends PureComponent
 {

@@ -4,7 +4,7 @@ const styles = (theme) => {
     const unit = theme.spacing.unit;
     return {
       paper: {
-        maxWidth: 550,
+        maxWidth: 435,
         width: '100%',
         minWidth: constants.minAppWidth,
         height: 100,

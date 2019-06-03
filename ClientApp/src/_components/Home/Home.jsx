@@ -18,47 +18,7 @@ import TimelineOutlined from '@material-ui/icons/TimelineOutlined';
 import PortraitOutlined from '@material-ui/icons/PortraitOutlined';
 import DoneAllOutlined from '@material-ui/icons/DoneAllOutlined';
 import Summary from '../_invincible/Summary';
-
-const HorizontalMenuFields =
-  [
-    {
-      text: 'COMPLETED',
-      callback: () => { },
-      iconComponent: <DoneAllOutlined />,
-      collapseAt: constants.applySmallWidth,
-    },
-    {
-      text: 'ACTIVE',
-      callback: () => { },
-      iconComponent: <WatchLaterOutlined />,
-      collapseAt: constants.applySmallWidth,
-    },
-    {
-      text: 'STATISTICS',
-      callback: () => { },
-      iconComponent: <TimelineOutlined />,
-      collapseAt: constants.applySmallWidth,
-    },
-    {
-      text: 'MANAGE PROFILE',
-      callback: () => { },
-      iconComponent: <PortraitOutlined />,
-      collapseAt: constants.applySmallWidth,
-    }
-  ];
-
-const styles = (theme) => {
-  const { unit } = theme.spacing;
-  return {
-    cardsContainer: {
-      border: '1px solid black !important',
-      display: 'block'
-    },
-    ComponentContainer: {
-      minWidth: constants.minAppWidth,
-    }
-  };
-};
+import { styles } from './HomeStyles';
 
 class Home extends React.PureComponent {
   constructor(props) {
@@ -66,6 +26,7 @@ class Home extends React.PureComponent {
     this.state = {
       loadFilesModalIsOpen: false,
       ModifyProfileModalIsOpen: false,
+      area: 'completed'
     };
   }
 
@@ -76,6 +37,35 @@ class Home extends React.PureComponent {
   render() {
     const { classes } = this.props;
     const currentUser = JSON.parse(localStorage.getItem('user')) || {};
+
+    const HorizontalMenuFields =
+      [
+        {
+          text: 'COMPLETED',
+          callback: () => {this.setState({area: 'completed'}) },
+          iconComponent: <DoneAllOutlined />,
+          collapseAt: constants.applySmallWidth,
+        },
+        {
+          text: 'ACTIVE',
+          callback: () => {this.setState({area: 'active'}) },
+          iconComponent: <WatchLaterOutlined />,
+          collapseAt: constants.applySmallWidth,
+        },
+        {
+          text: 'STATISTICS',
+          callback: () => {this.setState({area: 'statistics'}) },
+          iconComponent: <TimelineOutlined />,
+          collapseAt: constants.applySmallWidth,
+        },
+        {
+          text: 'MANAGE PROFILE',
+          callback: () => {this.setState({area: 'profile'}) },
+          iconComponent: <PortraitOutlined />,
+          collapseAt: constants.applySmallWidth,
+        }
+      ];
+
     return (
       <div className={classes.ComponentContainer}>
         <AvatarPanel
@@ -84,8 +74,11 @@ class Home extends React.PureComponent {
           patternImage={'url("https://img14.postila.ru/resize?w=660&src=%2Fdata%2F34%2F84%2F33%2Fa8%2F348433a8e32ac170a83318d5b957bfb094c936bccf75a66e21d6561a4122d843.png")'}
         />
         <HorizontalMenu buttonsArray={HorizontalMenuFields} customHeight={40} customFontSize={17} />
-        
-        <TimeCardsHolder />
+
+        {(this.state.area === 'completed') && <TimeCardsHolder statusGroup='completed'/>}
+        {(this.state.area === 'active') && <TimeCardsHolder statusGroup='active' addButton={true}/>}
+        {(this.state.area === 'statistics') && <span>Here goes statistics</span>}
+        {(this.state.area === 'profile') && <span>Here goes profile editor</span>}
       </div>
     );
   }

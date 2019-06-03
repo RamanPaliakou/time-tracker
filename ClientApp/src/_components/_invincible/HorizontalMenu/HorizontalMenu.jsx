@@ -15,7 +15,7 @@ class HorizontalMenu extends Component {
       height: props.customHeight || 'unset',
       fontSize: props.customFontSize || 'unset',
       textTransform: props.textTransform || 'unset',
-      enableSelection: (typeof (props.enableSelection !== undefined) ? (props.enableSelection === false ? false : true) : true),
+      enableSelection: (typeof (props.enableSelection !== "undefined") ? (props.enableSelection === false ? false : true) : true),
     };
   }
 
@@ -29,7 +29,7 @@ class HorizontalMenu extends Component {
     const { classes } = this.props;
     const { height, fontSize, textTransform, enableSelection } = this.state;
     const activeNumber = this.state.buttonSelected;
- 
+
     return (
       <Paper className={classes.backPaper}>
         <Grid container className={classes.menuElementsContainer}

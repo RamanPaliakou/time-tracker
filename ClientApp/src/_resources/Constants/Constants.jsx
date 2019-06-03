@@ -4,7 +4,7 @@ const constants  = {
     defaultFontSize: 15,
     menuFontSize: 14,
     applySmallWidth: 767,
-    applySidePaddings: 450
+    applySidePaddings: 450,
 }
 
 export default constants;

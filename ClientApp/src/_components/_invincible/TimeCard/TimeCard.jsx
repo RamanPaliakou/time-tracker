@@ -1,54 +1,38 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Icon from '@material-ui/core/Icon';
-import { Divider } from '@material-ui/core';
-import ExitToAppOutlined from '@material-ui/icons/ExitToAppOutlined';
-import { Paper, Button, Grid, IconButton } from '@material-ui/core/';
+import { Paper } from '@material-ui/core/';
 import { styles } from './TimeCardStyles';
 import Typography from '@material-ui/core/Typography';
 import HourglassEmptyTwoTone from '@material-ui/icons/HourglassEmptyTwoTone';
 import CheckCircleOutlineTwoTone from '@material-ui/icons/CheckCircleOutlineTwoTone';
 import AlarmOffTwoTone from '@material-ui/icons/AlarmOffTwoTone';
-import PortraitOutlined from '@material-ui/icons/PortraitOutlined';
-import ExpandLessOutlined from '@material-ui/icons/ExpandLessOutlined';
 import SwipeableViews from 'react-swipeable-views';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import ScrollableLine from '../ScrollableLine';
 import constants from '../../../_resources/Constants/Constants';
 import HorizontalMenu from '../HorizontalMenu/HorizontalMenu';
 import ArrowRight from '@material-ui/icons/ArrowRight';
 import ArrowLeft from '@material-ui/icons/ArrowLeft';
 import FlightTakeoff from '@material-ui/icons/FlightTakeoff';
 import FlightLand from '@material-ui/icons/FlightLand';
+import DirectionsRun from '@material-ui/icons/DirectionsRun';
 import Delete from '@material-ui/icons/Delete';
 import Summary from '../Summary';
+import createCardCreationFunction from '../../../_resources/Helpers/TimeCardHelper';
 
-const Description = (props) => {
-  return (
-    <div>
-      <Typography variant="h5" gutterBottom children={
-        props.description}
-      />
-    </div>
-  )
-}
 class TimeCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Title',
-      status: 'inProgress',
-      description: 'Description goes here',
+      id: props.id,
+      title: props.title || 'Title',
+      status: props.status || 'waiting',
       value: 0,
-      initialDate: new Date()
+      timePassed: 0,
+      timeSpent: props.timeSpent || 0,
+      startedTime: props.startedTime || 0,
+      completed: (typeof props.completed !== "undefined") ? props.completed : false,
+      started: (typeof props.started !== "undefined") ? props.started : false,
+      estimate: (typeof props.estimate !== "undefined") ? props.estimate : 0,
     };
   }
 
@@ -65,14 +49,41 @@ class TimeCard extends Component {
     else
       this.setState({ value: this.state.value - 1 })
   }
-  donothing = () => { console.log('donothing') }
-  getTime = () => {
 
+  setTimePassed = (value) => () => {
+    this.setState({ timePassed: value });
   }
+
+  displayTimePassed = () => {
+    console.log('Function is not asssigned on this button. Displaying current time state')
+    console.log(this.state.timePassed)
+  }
+
+  createCardAction = (func) => {
+    console.log('start card timeCard', this.state, this.props);
+    const card = createCardCreationFunction(this.state)();
+      func(card)(); 
+  }
+  startCard = () => {
+    const card = createCardCreationFunction(this.state)();
+    this.props.startCard(card)(); 
+  }
+
+  completeCard = () => {
+    const card = createCardCreationFunction(this.state)();
+    this.props.completeCard(card)(); 
+  }
+
+  deleteCard = () => {
+      const card = createCardCreationFunction(this.state)();
+      this.props.deleteCard(card)(); 
+  }
+
   Icon = {
-    inProgress: <HourglassEmptyTwoTone />,
+    inProgress: <DirectionsRun />,
+    waiting: <HourglassEmptyTwoTone />,
     completed: <CheckCircleOutlineTwoTone />,
-    notCoped: <AlarmOffTwoTone />
+    badEstimated: <AlarmOffTwoTone />
   }
 
   Title = (props) => {
@@ -86,11 +97,33 @@ class TimeCard extends Component {
     )
   }
 
+  componentWillReceiveProps(nextProps) {
+    const newState = {
+      id: nextProps.id,
+      title: nextProps.title || this.state.title,
+      status: nextProps.status || this.state.status,
+      value: 0,
+      timePassed: this.state.timePassed,
+      timeSpent: nextProps.timeSpent || this.state.timeSpent,
+      startedTime: nextProps.startedTime || this.state.startedTime,
+      completed:  nextProps.completed || this.state.completed,
+      started: nextProps.started || this.state.started,
+      estimate: nextProps.estimate || this.state.estimate,
+    }
+    this.setState(newState);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const stateExNow = JSON.stringify({ ...this.state, timePassed: '' });
+    const stateExNew = JSON.stringify({ ...nextState, timePassed: '' });
+
+    if (stateExNow == stateExNew && this.props == nextProps) return false;
+    return true;
+  }
+
   render() {
     const { classes } = this.props;
-    const { title, description, status } = this.state;
-    const donothing = this.donothing;
-
+    const { title, status, completed, started, startedTime, estimate, timeSpent } = this.state;    
     const HorizontalMenuFields =
       [
         {
@@ -101,19 +134,19 @@ class TimeCard extends Component {
         },
         {
           text: 'start',
-          callback: donothing,
+          callback: this.startCard,
           iconComponent: <FlightTakeoff />,
           collapseAt: constants.applySmallWidth,
         },
         {
           text: 'delete',
-          callback: donothing,
+          callback: this.deleteCard,
           iconComponent: <Delete />,
           collapseAt: constants.applySmallWidth,
         },
         {
           text: 'complete',
-          callback: donothing,
+          callback: this.completeCard,
           iconComponent: <FlightLand />,
           collapseAt: constants.applySmallWidth,
         },
@@ -124,9 +157,7 @@ class TimeCard extends Component {
           collapseAt: constants.applySmallWidth,
         }
       ];
-
     return (
-      
       <Paper className={classes.paper}>
         <div className={classes.formatPaper}>
 
@@ -138,19 +169,22 @@ class TimeCard extends Component {
 
             <div className={classes.contentArea} children={
               <SwipeableViews className={classes.swipeableViews} axis={'x'} index={this.state.value}>
-                <div className={classes.tabElement} children=
-                  {<this.Title title='Create a card title' />} />
-                <div className={classes.tabElement} children=
-                  {
-                    <Summary isActive = {(this.state.value === 1)} estimate={3} initialDate={this.state.initialDate} started={true} completed={false}/>
-                  } />
-              </SwipeableViews>
-            } />
+                <div className={classes.tabElement} children={
+                  <this.Title title={title} />}
+                />
+                <div className={classes.tabElement} children={
+                  <Summary isActive={(this.state.value === 1)} timeSpent={timeSpent}
+                    callbackTimePassed={this.setTimePassed} estimate={estimate}
+                    startedTime={startedTime} started={started} completed={completed} />}
+                />
+              </SwipeableViews>}
+            />
 
           </div>
 
           <HorizontalMenu className={classes.menu} buttonsArray={HorizontalMenuFields}
-            customHeight={22} customFontSize={7} textTransform={'lowercase'} enableSelection={false} />
+            customHeight={22} customFontSize={7} textTransform={'lowercase'} enableSelection={false}
+          />
         </div>
       </Paper >
 

@@ -39,7 +39,7 @@ class HorizontalMenuButton extends Component {
   };
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    if (typeof (nextProps.activeColor) !== undefined) {
+    if (typeof (nextProps.activeColor) !== "undefined") {
       if (this.props.buttonActiveColor !== nextProps.buttonActiveColor)
         nextState = { ...nextState, buttonActiveColor: nextProps.buttonActiveColor };
     }
@@ -54,7 +54,8 @@ class HorizontalMenuButton extends Component {
     const className = classes[align];
     return (
       <Button  className={className}
-        style={{ width: "100%", height: height, fontSize: fontSize, textTransform: textTransform }} variant={isSelected ? 'contained' : 'buttonColor'} color={isSelected ? buttonActiveColor : buttonColor}
+        style={{ width: "100%", height: height, fontSize: fontSize, textTransform: textTransform }} 
+        variant = {isSelected ? 'contained' : 'text'}color={isSelected ? buttonActiveColor : buttonColor}
         onClick={this.props.onClick}>
 
         <MediaQuery minWidth={this.props.collapseAt + 1} children={
