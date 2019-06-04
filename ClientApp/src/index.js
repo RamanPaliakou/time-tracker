@@ -4,19 +4,19 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { store } from './_helpers/Store';
-import App from './_containers/App/App.jsx';
+import {getStore} from './Helpers';
+import {App} from './App/App.jsx';
+import { history } from './Helpers';
 import registerServiceWorker from './registerServiceWorker';
 
-const baseUrl = "/"//document.getElementsByTagName('base')[0].getAttribute('href');
+const baseUrl = "/";
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter basename={baseUrl}>
-      <App />
+  <Provider store={getStore()}>
+    <BrowserRouter >
+      <App id={'appMain'}/>
     </BrowserRouter>
   </Provider>, rootElement);
 

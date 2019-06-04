@@ -61,10 +61,10 @@ namespace Tracker
             services.AddScoped<IUserService, UserService>();
 
             //Connect to React
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            });
+            //services.AddSpaStaticFiles(configuration =>
+            //{
+            //    configuration.RootPath = "ClientApp/build";
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,9 +91,9 @@ namespace Tracker
                 .AllowCredentials());
 
             app.UseAuthentication();
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            //app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+            //app.UseSpaStaticFiles();
 
             app.UseMvc(routes =>
                {
@@ -102,15 +102,15 @@ namespace Tracker
                        template: "{controller}/{action=Index}/{id?}");
                });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseReactDevelopmentServer(npmScript: "start");
+            //    }
+            //});
         }
     }
 }

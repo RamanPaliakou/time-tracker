@@ -21,10 +21,20 @@ namespace WebApi.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]User userParam)
         {
-            var user = _userService.Authenticate(userParam.Username, userParam.Password);
-
+            var user= _userService.Authenticate(userParam.Email.ToLower(), userParam.Password);
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
+
+            return Ok(user);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public IActionResult Register([FromBody]User userParam)
+        {
+            var user = _userService.Register(userParam.Email.ToLower(), userParam.Password, userParam.Fullname, userParam.Username);
+            if (user == null)
+                return BadRequest(new { message = "Not all fields are valid" });
 
             return Ok(user);
         }
