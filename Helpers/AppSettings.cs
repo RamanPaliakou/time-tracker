@@ -1,4 +1,4 @@
-﻿namespace WebApi.Helpers
+﻿namespace Tracker.Helpers
 {
     public class AppSettings
     {

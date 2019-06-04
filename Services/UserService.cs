@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using WebApi.Entities;
-using WebApi.Helpers;
+using Tracker.Data.Entities;
+using Tracker.Helpers;
 
-namespace WebApi.Services
+namespace Tracker.Services
 {
     public interface IUserService
     {
@@ -66,7 +66,8 @@ namespace WebApi.Services
         public IEnumerable<User> GetAll()
         {
             // return users without passwords
-            return _users.Select(x => {
+            return _users.Select(x =>
+            {
                 x.Password = null;
                 return x;
             });

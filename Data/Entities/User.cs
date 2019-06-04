@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebApi.Entities
+namespace Tracker.Data.Entities
 {
     public class User
     {

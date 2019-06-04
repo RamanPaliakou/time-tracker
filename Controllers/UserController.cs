@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using WebApi.Services;
-using WebApi.Entities;
+using Tracker.Services;
+using Tracker.Data.Entities;
 
 namespace WebApi.Controllers
 {

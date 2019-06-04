@@ -4,14 +4,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System.Data.Entity;
+//using System.Data.Entity;
 using System.Text;
-using WebApi.Helpers;
-using WebApi.Services;
+using Tracker.Data;
+using Tracker.Helpers;
+using Tracker.Services;
+using Tracker.Web.Helpers;
 
 namespace Tracker
 {
@@ -27,6 +30,11 @@ namespace Tracker
 
         public void ConfigureServices(IServiceCollection services)
         {
+            MongoDbCreator.CreateDbInstance(Configuration.GetValue<string>("MongoInstancePath"), Configuration.GetValue<int>("MongoInstancePort"));
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddCors();
             services.AddMvc();//.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
