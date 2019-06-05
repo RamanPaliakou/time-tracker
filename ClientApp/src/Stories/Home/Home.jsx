@@ -12,8 +12,7 @@ import DoneAllOutlined from '@material-ui/icons/DoneAllOutlined';
 import {styles} from './HomeStyles';
 import DiagramHolder from '../../Components/_subsidiary/DiagramHolder';
 import {connect} from 'react-redux';
-import { userService } from '../../Services';
-import {userActions} from "../../Actions";
+import {userActions, cardActions} from "../../Actions";
 import {_timeCards} from "../../Mock/TimeCardData";
 
 class HomePage extends React.PureComponent {
@@ -24,25 +23,27 @@ class HomePage extends React.PureComponent {
       ModifyProfileModalIsOpen: false,
       area: 'completed'
     };
+    this.verifyActiveUser();
   }
 
   logout = () => {
     this.props.dispatch(userActions.logoutNRedirect());
   };
 
-  componentDidMount() {
-    //this.props.dispatch(userActions.getAll());
+  verifyActiveUser = () => {
+    let user = window.localStorage.getItem("user");
+    if (user == null)
+      this.props.dispatch(userActions.logoutNRedirect());
   }
 
   doTestQuery = () => {
+    var email = JSON.parse(window.localStorage.getItem("user")).email;
+    this.props.dispatch(cardActions.loadCards(email));
     console.log(JSON.stringify(_timeCards));
   };
 
   render() {
     const {classes} = this.props;
-    const currentUser = JSON.parse(localStorage.getItem('user')) || {};
-
-
     const HorizontalMenuFields =
       [
         {
@@ -78,7 +79,6 @@ class HomePage extends React.PureComponent {
           collapseAt: appConstants.applySmallWidth,
         }
       ];
-
     return (
       <div className={classes.ComponentContainer}>
         <AvatarPanel
@@ -93,7 +93,6 @@ class HomePage extends React.PureComponent {
         {(this.state.area === 'active') && <TimeCardsHolder statusGroup='active' addButton={true}/>}
         {(this.state.area === 'statistics') && <DiagramHolder/>}
         {(this.state.area === 'profile') && <span>Here goes profile editor</span>}
-
 
       </div>
     );

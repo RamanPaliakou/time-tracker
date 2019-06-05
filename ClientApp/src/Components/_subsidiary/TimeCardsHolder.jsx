@@ -4,6 +4,8 @@ import TimeCard from '../TimeCard/TimeCard';
 import {appConstants} from '../../Constants';import { statusGroups } from '../../Constants/StatusGroups';
 import spinner from '../../Resources/Images/spinner.gif'
 import { getTimeCards } from '../../Helpers/MockData';
+import {cardActions} from "../../Actions";
+import {connect} from "react-redux";
 
 const styles = (theme) => {
     const unit = theme.spacing.unit;
@@ -34,7 +36,7 @@ const styles = (theme) => {
     };
 };
 
-class TimeCardsHolder extends PureComponent {
+class TimeCardsHolderUI extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,15 +46,20 @@ class TimeCardsHolder extends PureComponent {
     }
 
     applyCards = () => {
-        let sg = statusGroups[this.props.statusGroup];
-        const setState = this.setState.bind(this);
-        let get = new Promise((resolve, reject) => {
-            var cards = getTimeCards();//;
-
-            resolve(cards);    
-        });
-            get.then(x => x.filter( x => sg.includes(x.status) ))
-                .then(x=> setState({cards:x, isLoaded: true}));
+        // let sg = statusGroups[this.props.statusGroup];
+        // const dispatch = this.props.dispatch;
+        //
+        // const setState = this.setState.bind(this);
+        // let get = new Promise((resolve, reject) => {
+        //     const currentUser = JSON.parse(localStorage.getItem('user')) || {};
+        //     var cards = dispatch(cardActions.loadCards(currentUser.email));
+        //
+        //      getTimeCards();//;
+        //
+        //     resolve(cards);
+        // });
+        //     get.then(x => x.filter( x => sg.includes(x.status) ))
+        //         .then(x=> setState({cards:x, isLoaded: true}));
     }
 
     startCardCreate = (card) => () => {
@@ -101,14 +108,11 @@ class TimeCardsHolder extends PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log('didUpdate', this.state);
+
     }
 
     componentDidMount() {
         this.applyCards();
-        // if (!this.state.isLoaded) {
-        //     return new Promise((resolve, reject) => ) setTimeout(() => this.setValues(), 500);
-        // }
     }
 
     logState = () => {
@@ -118,7 +122,6 @@ class TimeCardsHolder extends PureComponent {
     render() {
         const { classes } = this.props;
         const { cards } = this.state;
-        console.log('dsf'); (Array.prototype.map.call(cards, x => console.log(x)));
         return (
             <div className={classes.container} >
                 {this.state.isLoaded &&
@@ -146,5 +149,16 @@ class TimeCardsHolder extends PureComponent {
     }
 };
 
+function mapStateToProps(state) {
+    const {users, authentication, cards} = state;
+    const {loadedCards, loadCardsFailed} = cards;
+    return {
+        loadedCards,
+        loadCardsFailed
+    };
+}
 
-export default withStyles(styles)(TimeCardsHolder)
+const TimeCardsHolder = connect(mapStateToProps)(TimeCardsHolderUI);
+
+
+export default withStyles(styles)(TimeCardsHolder);

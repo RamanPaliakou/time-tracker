@@ -18,5 +18,7 @@ namespace Tracker.Web.Data.Interfaces
 
         IEnumerable<Card> GetAll();
 
+        IEnumerable<Card> GetAllOfEmail(string email);
+
     }
 }

@@ -20,6 +20,6 @@ namespace Tracker.Web.Data.Interfaces
 
         void DeleteUser(Guid id);
 
-        void MarkInitialized(Guid id);
+        void MarkInitialized(User user);
     }
 }

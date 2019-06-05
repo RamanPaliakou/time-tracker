@@ -15,6 +15,7 @@ using Tracker.Data;
 using Tracker.Helpers;
 using Tracker.Services;
 using Tracker.Web.Data;
+using Tracker.Web.Data.Aggregates;
 using Tracker.Web.Data.Interfaces;
 using Tracker.Web.Data.Repositories;
 using Tracker.Web.Helpers;
@@ -34,17 +35,26 @@ namespace Tracker
         {
             MongoDbCreator.CreateDbInstance(Configuration.GetValue<string>("MongoInstancePath"), Configuration.GetValue<int>("MongoInstancePort"));
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+             
+            services.AddCors(x => x.AddPolicy("Default", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowCredentials()
+                       .AllowAnyHeader();
+            }));
 
-            services.AddCors();
-            services.AddMvc();//.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -68,46 +78,40 @@ namespace Tracker
             });
 
             // configure DI for application services
+            services.AddSingleton<IMongoContext, MongoDbContext>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICardRepository, CardRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IGlobalActionsRepository, GlobalActionsRepository>();
-            services.AddSingleton<IMongoContext, MongoDbContext>();
+            services.AddScoped<ICardAggregate, CardAggregate>();
+
+
             //Connect to React
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            });
+            //services.AddSpaStaticFiles(configuration =>
+            //{
+            //    configuration.RootPath = "ClientApp/build";
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
             {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+            app.UseCors("Default");
 
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
 
             app.UseAuthentication();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
-
+            //app.UseSpaStaticFiles();
             app.UseMvc(routes =>
                {
                    routes.MapRoute(
@@ -115,15 +119,15 @@ namespace Tracker
                        template: "{controller}/{action=Index}/{id?}");
                });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseReactDevelopmentServer(npmScript: "start");
+            //    }
+            //});
         }
     }
 }

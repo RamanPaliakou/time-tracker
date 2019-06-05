@@ -52,10 +52,9 @@ namespace Tracker.Web.Data.Repositories
             context.SaveChanges();
         }
 
-        public void MarkInitialized(Guid id)
+        public void MarkInitialized(User user)
         {
-            var user = GetUserByID(id);
-            user.IsInitialized = true;
+            context.Users.FirstOrDefault(x => x.Id == user.Id).IsInitialized = true;
             context.SaveChanges();
         }
 

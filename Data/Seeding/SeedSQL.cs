@@ -44,6 +44,7 @@ namespace Tracker.Web.Data.Seeding
 
         public static void SeedCards(this ModelBuilder builder)
         {
+
         }
     }
 }

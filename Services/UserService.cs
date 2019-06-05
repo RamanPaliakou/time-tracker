@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using Tracker.Data.Entities;
 using Tracker.Helpers;
+using Tracker.Web.Data.Aggregates;
 
 namespace Tracker.Services
 {
@@ -60,6 +61,7 @@ namespace Tracker.Services
             };
 
             _users.Add(user);
+
             return GenerateToken(user);
         }
 

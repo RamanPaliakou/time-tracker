@@ -1,5 +1,6 @@
 // import config from 'config'; ${config.apiUrl}
 import { authHeader } from '../Helpers';
+import {appConstants} from "../Constants";
 
 export const userService = {
   login,
@@ -14,8 +15,9 @@ function login(email, password) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({Email:email, Password:password})
   };
-  //http://localhost:4000
-  return fetch(`/users/authenticate`, requestOptions)
+  var url = appConstants.urlPrefix + `/users/authenticate`;
+  console.log(url);
+  return fetch(url, requestOptions)
     .then(handleResponse)
     .then(user => {
     // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -33,8 +35,9 @@ function register(email, password, fullname, username) {
     body: JSON.stringify({Email: email, Password: password, Username: username, Fullname: fullname})
   };
 
-  //http://localhost:4000
-  return fetch(`/users/register`, requestOptions)
+  var url = appConstants.urlPrefix + `/users/register`;
+  console.log(url);
+  return fetch(url, requestOptions)
     .then(handleResponse)
     .then(user => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes

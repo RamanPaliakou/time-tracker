@@ -5,4 +5,5 @@ export const appConstants  = {
     menuFontSize: 14,
     applySmallWidth: 767,
     applySidePaddings: 450,
+    urlPrefix:'http://localhost:4000'
 };

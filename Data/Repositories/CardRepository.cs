@@ -50,6 +50,29 @@ namespace Tracker.Web.Data.Repositories
             return context.Cards.AsEnumerable<Card>();
         }
 
+        public IEnumerable<Card> GetAllOfEmail(string email)
+        {
+            return context.Cards
+              .Join(context.Users,
+                    c => c.UserId,
+                    u => u.Id,
+                    (c, u) => new { c, u })
+              .Where(cu => cu.u.Email == email)
+              .Select(cu => new Card
+              {
+                  Id = cu.c.Id,
+                  UserId = cu.c.UserId,
+                  Title = cu.c.Title,
+                  TimeSpent = cu.c.TimeSpent,
+                  Status = cu.c.Status,
+                  StartedTime = cu.c.StartedTime,
+                  Estimate = cu.c.Estimate,
+                  CreationDate = cu.c.CreationDate,
+                  VewRecordId = cu.c.VewRecordId,
+              })
+              .AsEnumerable<Card>();
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)

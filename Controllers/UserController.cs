@@ -13,20 +13,20 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private IUserService _userService;
-        private IMongoContext _mongo;
+        private IUserService UserService;
+        private ICardAggregate CardAggregate;
 
-        public UsersController(IUserService userService, IMongoContext mc)
+        public UsersController(IUserService userService, IMongoContext mc, ICardAggregate cardAggregate)
         {
-            _userService = userService;
-            _mongo = mc;
+            UserService = userService;
+            CardAggregate = cardAggregate;
         }
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]User userParam)
         {
-            var user= _userService.Authenticate(userParam.Email.ToLower(), userParam.Password);
+            var user= UserService.Authenticate(userParam.Email.ToLower(), userParam.Password);
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
@@ -37,18 +37,18 @@ namespace WebApi.Controllers
         [HttpPost("register")]
         public IActionResult Register([FromBody]User userParam)
         {
-            var user = _userService.Register(userParam.Email.ToLower(), userParam.Password, userParam.Fullname, userParam.Username);
+            var user = UserService.Register(userParam.Email.ToLower(), userParam.Password, userParam.Fullname, userParam.Username);
             if (user == null)
                 return BadRequest(new { message = "Not all fields are valid" });
-
+            CardAggregate.InitCardsForUser(userParam.Email.ToLower());
             return Ok(user);
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
+        [AllowAnonymous]
+        [HttpGet("health")]
+        public IActionResult health()
         {
-            var users = _userService.GetAll();
-            return Ok(users);
+            return Ok("All GOOD");
         }
     }
 }
