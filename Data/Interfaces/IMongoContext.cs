@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tracker.Web.Data.Entities;
 
 namespace Tracker.Web.Data.Interfaces
 {
     public interface IMongoContext
     {
-        IMongoDatabase Cards { get; }
-        IMongoDatabase Avatars { get; }
-        IMongoDatabase Backgrounds { get; }
+        MongoClient Client { get; }
+        IMongoDatabase Database { get; }
+        IMongoCollection<ViewCard> Cards { get; }
     }
 }

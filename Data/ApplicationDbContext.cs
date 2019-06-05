@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tracker.Data.Entities;
+using Tracker.Web.Data.Entities;
+using Tracker.Web.Data.Seeding;
 
 namespace Tracker.Data
 {
@@ -19,29 +21,14 @@ namespace Tracker.Data
         }
 
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Card> Cards { get; set; }
+        public virtual DbSet<StatusBound> BoundStatuses { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.ToTable("Users");
-
-                entity.HasIndex(e => e.Id).IsUnique();
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-            });
-
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                Email = "test@test.com",
-                Password = "test",
-                Fullname = "test",
-                Username = "test"
-            };
-
-            modelBuilder.Entity<User>().HasData(user);
+            builder.AddConstraints();
+            builder.SeedUsers();
+            builder.SeedCards();
         }
     }
 }

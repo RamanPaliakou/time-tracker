@@ -14,6 +14,7 @@ import DiagramHolder from '../../Components/_subsidiary/DiagramHolder';
 import {connect} from 'react-redux';
 import { userService } from '../../Services';
 import {userActions} from "../../Actions";
+import {_timeCards} from "../../Mock/TimeCardData";
 
 class HomePage extends React.PureComponent {
   constructor(props) {
@@ -34,7 +35,7 @@ class HomePage extends React.PureComponent {
   }
 
   doTestQuery = () => {
-    console.log('testquery');
+    console.log(JSON.stringify(_timeCards));
   };
 
   render() {

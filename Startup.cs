@@ -14,6 +14,9 @@ using System.Text;
 using Tracker.Data;
 using Tracker.Helpers;
 using Tracker.Services;
+using Tracker.Web.Data;
+using Tracker.Web.Data.Interfaces;
+using Tracker.Web.Data.Repositories;
 using Tracker.Web.Helpers;
 
 namespace Tracker
@@ -26,7 +29,6 @@ namespace Tracker
         }
 
         public IConfiguration Configuration { get; }
-
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -67,12 +69,15 @@ namespace Tracker
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
-
+            services.AddScoped<ICardRepository, CardRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IGlobalActionsRepository, GlobalActionsRepository>();
+            services.AddSingleton<IMongoContext, MongoDbContext>();
             //Connect to React
-            //services.AddSpaStaticFiles(configuration =>
-            //{
-            //    configuration.RootPath = "ClientApp/build";
-            //});
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,9 +104,9 @@ namespace Tracker
                 .AllowCredentials());
 
             app.UseAuthentication();
-            //app.UseHttpsRedirection();
-            //app.UseStaticFiles();
-            //app.UseSpaStaticFiles();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
 
             app.UseMvc(routes =>
                {
@@ -110,15 +115,15 @@ namespace Tracker
                        template: "{controller}/{action=Index}/{id?}");
                });
 
-            //app.UseSpa(spa =>
-            //{
-            //    spa.Options.SourcePath = "ClientApp";
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
 
-            //    if (env.IsDevelopment())
-            //    {
-            //        spa.UseReactDevelopmentServer(npmScript: "start");
-            //    }
-            //});
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
         }
     }
 }

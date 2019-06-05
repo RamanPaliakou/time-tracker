@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Tracker.Services;
 using Tracker.Data.Entities;
+using Tracker.Web.Data.Interfaces;
+using System;
+using MongoDB.Driver;
 
 namespace WebApi.Controllers
 {
@@ -11,10 +14,12 @@ namespace WebApi.Controllers
     public class UsersController : ControllerBase
     {
         private IUserService _userService;
+        private IMongoContext _mongo;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IMongoContext mc)
         {
             _userService = userService;
+            _mongo = mc;
         }
 
         [AllowAnonymous]

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tracker.Data.Entities;
+using Tracker.Web.Data.Entities;
 using Tracker.Web.Data.Interfaces;
 
 namespace Tracker.Web.Data
@@ -14,16 +16,12 @@ namespace Tracker.Web.Data
         private static bool _isInitialized = false;
         private static string connectionString;
         private static MongoClient _Client;
-        private static IMongoDatabase _Cards;
-        private static IMongoDatabase _Avatars;
-        private static IMongoDatabase _Backgrounds;
-
+        private static IMongoDatabase db;
+        private static IMongoCollection<ViewCard> _Cards;
 
         public MongoClient Client { get { return _Client; } private set { _Client = value; } }
-        public IMongoDatabase Cards { get { return _Cards; } private set { _Cards = value; } }
-        public IMongoDatabase Avatars { get { return _Avatars; } private set { _Avatars = value; } }
-        public IMongoDatabase Backgrounds { get { return _Backgrounds; } private set { _Backgrounds = value; } }
-
+        public IMongoDatabase Database { get { return db; } private set { db = value; } }
+        public IMongoCollection<ViewCard> Cards { get { return _Cards; } private set { _Cards = value; } }
 
         public MongoDbContext(IConfiguration configuration)
         {
@@ -38,13 +36,15 @@ namespace Tracker.Web.Data
 
         private void initContext()
         {
+            //In case method is executed just after mongodb instance creation
+            System.Threading.Thread.Sleep(2000);
+
             connectionString = _configuration.GetValue<string>("MongoInstanceServer") + ":" + _configuration.GetValue<string>("MongoInstancePort")+'/';
 
-            Client = new MongoClient();
+            Client = new MongoClient(connectionString);
 
-            _Cards = Client.GetDatabase("Cards");
-            _Avatars = Client.GetDatabase("Avatars");
-            _Backgrounds = Client.GetDatabase("Backgrounds");
+            db = Client.GetDatabase("TimeTracker");
+            _Cards = db.GetCollection<ViewCard>("Cards");
         }
     }
 }
