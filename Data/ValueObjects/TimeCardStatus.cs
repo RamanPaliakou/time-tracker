@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Tracker.Web.Data.ValueObjects
 {
-    public enum ImageCardStatus
+    public enum TimeCardStatus
     {
         inProgress = 0,
         waiting = 1,

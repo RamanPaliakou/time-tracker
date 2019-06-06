@@ -6,7 +6,7 @@ using Tracker.Web.Data.Entities;
 
 namespace Tracker.Web.Data.Interfaces
 {
-    interface IViewCardRepository
+    public interface IViewCardRepository
     {
         ViewCard GetById(Guid id);
 
@@ -18,10 +18,12 @@ namespace Tracker.Web.Data.Interfaces
 
         void DeleteCard(string id);
 
-        void UpdateCreate(Guid id, ViewCard newCard);
+        void UpdateCreate(ViewCard newCard);
 
         IEnumerable<ViewCard> GetAll();
 
         IEnumerable<ViewCard> GetAllOfStatus(string status);
+
+        IEnumerable<ViewCard> GetAllByUserId(string userId);
     }
 }

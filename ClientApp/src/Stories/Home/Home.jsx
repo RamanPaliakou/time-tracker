@@ -3,7 +3,7 @@ import {withStyles} from '@material-ui/core/styles/index';
 import {Grid, Paper} from '@material-ui/core/';
 import AvatarPanel from '../../Components/_subsidiary/AvatarPanel';
 import HorizontalMenu from '../../Components/HorizontalMenu/HorizontalMenu';
-import TimeCardsHolder from '../../Components/_subsidiary/TimeCardsHolder';
+import TimeCardsHolder from '../../Components/TimeCardsHolder/TimeCardsHolder';
 import {appConstants} from "../../Constants";
 import WatchLaterOutlined from '@material-ui/icons/WatchLaterOutlined';
 import TimelineOutlined from '@material-ui/icons/TimelineOutlined';
@@ -13,7 +13,7 @@ import {styles} from './HomeStyles';
 import DiagramHolder from '../../Components/_subsidiary/DiagramHolder';
 import {connect} from 'react-redux';
 import {userActions, cardActions} from "../../Actions";
-import {_timeCards} from "../../Mock/TimeCardData";
+import CardCreatorUI from '../../Components/_subsidiary/CardCreator'
 
 class HomePage extends React.PureComponent {
   constructor(props) {
@@ -23,7 +23,7 @@ class HomePage extends React.PureComponent {
       ModifyProfileModalIsOpen: false,
       area: 'completed'
     };
-    //this.verifyActiveUser();
+    this.verifyActiveUser();
   }
 
   logout = () => {
@@ -37,9 +37,7 @@ class HomePage extends React.PureComponent {
   }
 
   doTestQuery = () => {
-    var email = JSON.parse(window.localStorage.getItem("user")).email;
-    this.props.dispatch(cardActions.loadCards(email));
-    console.log(JSON.stringify(_timeCards));
+
   };
 
   render() {
@@ -87,8 +85,9 @@ class HomePage extends React.PureComponent {
           avatarImage="https://cdn0.iconfinder.com/data/icons/iconshock_guys/512/andrew.png"
           patternImage={'url("https://img14.postila.ru/resize?w=660&src=%2Fdata%2F34%2F84%2F33%2Fa8%2F348433a8e32ac170a83318d5b957bfb094c936bccf75a66e21d6561a4122d843.png")'}
         />
-        <HorizontalMenu buttonsArray={HorizontalMenuFields} customHeight={40} customFontSize={17}/>
 
+        <HorizontalMenu buttonsArray={HorizontalMenuFields} customHeight={40} customFontSize={17}/>
+        <CardCreatorUI/>
         {(this.state.area === 'completed') && <TimeCardsHolder statusGroup='completed'/>}
         {(this.state.area === 'active') && <TimeCardsHolder statusGroup='active' addButton={true}/>}
         {(this.state.area === 'statistics') && <DiagramHolder/>}
@@ -98,7 +97,6 @@ class HomePage extends React.PureComponent {
     );
   }
 }
-
 
 function mapStateToProps(state) {
   const {users, authentication} = state;

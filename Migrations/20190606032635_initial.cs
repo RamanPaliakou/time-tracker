@@ -42,13 +42,12 @@ namespace Tracker.Web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    VewRecordId = table.Column<Guid>(nullable: false),
                     Title = table.Column<string>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    TimeSpent = table.Column<decimal>(nullable: false),
+                    CreatedAt = table.Column<decimal>(nullable: false),
                     Estimate = table.Column<decimal>(nullable: false),
-                    StartedTime = table.Column<decimal>(nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false),
+                    StartedAt = table.Column<decimal>(nullable: false),
+                    CompletedAt = table.Column<decimal>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -65,13 +64,7 @@ namespace Tracker.Web.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "Fullname", "IsInitialized", "Password", "Token", "Username" },
-                values: new object[] { new Guid("1e05f9e0-29e6-4dcb-902f-02946d685618"), "test@test.com", "test", false, "test", null, "test" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cards_CreationDate",
-                table: "Cards",
-                column: "CreationDate",
-                unique: true);
+                values: new object[] { new Guid("47f6d6fb-23d6-4216-a44b-54b7470b162e"), "test@test.com", "test", false, "test", null, "test" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cards_UserId",
@@ -83,13 +76,6 @@ namespace Tracker.Web.Migrations
                 table: "Users",
                 column: "Email",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Username",
-                table: "Users",
-                column: "Username",
-                unique: true,
-                filter: "[Username] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

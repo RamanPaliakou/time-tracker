@@ -1,4 +1,3 @@
-// import config from 'config'; ${config.apiUrl}
 import { authHeader } from '../Helpers';
 import {appConstants} from "../Constants";
 
@@ -16,7 +15,6 @@ function login(email, password) {
     body: JSON.stringify({Email:email, Password:password})
   };
   var url = appConstants.urlPrefix + `/users/authenticate`;
-  console.log(url);
   return fetch(url, requestOptions)
     .then(handleResponse)
     .then(user => {
@@ -36,7 +34,6 @@ function register(email, password, fullname, username) {
   };
 
   var url = appConstants.urlPrefix + `/users/register`;
-  console.log(url);
   return fetch(url, requestOptions)
     .then(handleResponse)
     .then(user => {

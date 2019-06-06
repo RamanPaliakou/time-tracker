@@ -2,19 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import { styles } from './TimeCardStyles';
 import Typography from '@material-ui/core/Typography';
-import {createTimeDiferenceFunction} from '../../Helpers'
+import {timeDiferenceFunction} from '../../Helpers'
 
 class Summary extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentDisplay: '0',
-            startedTime: this.props.startedTime || new Date().getTime(),
-            status: props.status || "waiting",
-            completed: (typeof props.completed !== "undefined") ? props.completed : false,
-            started: (typeof props.started !== "undefined") ? props.started : false,
-            estimate: (typeof props.estimate !== "undefined") ? props.estimate : 0,
-            isActive: props.isActive || false
+            currentDisplay: '0'
         }
     }
     static propTypes = {
@@ -25,56 +19,45 @@ class Summary extends Component {
     };
 
     componentDidMount() {
-        
             this.interval = setInterval(() => {
                 let cr = new Date();
 
                 const diffTime = Math.abs(cr.getTime() - this.props.startedTime);
-                const msToString = createTimeDiferenceFunction(diffTime);
 
-                const cd = msToString();
+                const cd = timeDiferenceFunction(diffTime);
 
                 this.props.callbackTimePassed(diffTime)();
-                this.setState({ currentDisplay: cd });
+                if (this.props.started && !this.props.completed)
+                    this.setState({ currentDisplay: cd });
             }, 1000)
-        
     }
-
-    componentWillReceiveProps(nextProps) {
-        const newState = {
-            currentDisplay: this.state.currentDisplay,
-            startedTime: nextProps.startedTime || new Date().getTime(),
-            completed: (typeof nextProps.completed !== "undefined") ? nextProps.completed : this.state.completed,
-            started: (typeof nextProps.started !== "undefined") ? nextProps.started : this.state.started,
-            estimate: (typeof nextProps.estimate !== "undefined") ? nextProps.estimate : this.state.estimate,
-            isActive: nextProps.isActive || false
-        }
-        this.setState(newState);
-    }
-
 
     shouldComponentUpdate(nextProps, nextState) {
-        const value = this.state.isActive && (this.state.started && !this.state.completed)
-        return value;
+        // const value = t
+        //   && (nextProps != this.props && nextState != this.state);
+        // return value;
+        if (!this.props.summaryValuesCorrect) return true;
+        if (!this.props.isActive) return false;
+        if (nextProps.timeSpent === this.props.timeSpent && this.state.currentDisplay === nextState.currentDisplay) return false;
+        return true;
     }
 
     render() {
-        const { currentDisplay, estimate } = this.state;
-        const { timeSpent, status } = this.props;
-
-        const completed = (status === "completed" || status === "badEstimated");
-        const estimatedTime = createTimeDiferenceFunction(estimate);
+        console.log(this.props);
+        const { currentDisplay,  } = this.state;
+        const { timeSpent, estimate, completed } = this.props;
+        console.log(this.props);
+        const estimatedTime = typeof(estimate) != "undefined" ? timeDiferenceFunction(estimate) : "";
         return (
-            <div className={this.props.summary} styles={{}} >
+            <div className={this.props.summary}>
                 <Typography variant="h5" gutterBottom styles={{ margin: 'auto 0' }}>
-                    Estimated as: {estimatedTime()}
+                    Estimated as: {estimatedTime}
                 </Typography>
                 <Typography variant="h5" gutterBottom styles={{ margin: 'auto 0' }}>
-                    Time Passed: {completed ? createTimeDiferenceFunction(timeSpent)() : currentDisplay}
+                    Time Passed: {completed ? timeDiferenceFunction(timeSpent) : currentDisplay}
                 </Typography>
             </div>
         )
-
     }
 }
 export default Summary;

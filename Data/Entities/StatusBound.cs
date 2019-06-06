@@ -11,7 +11,7 @@ namespace Tracker.Web.Data.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public ImageCardStatus Status {get; set;}
+        public TimeCardStatus Status {get; set;}
         public string StringRepresentation { get; set; }
     }
 }

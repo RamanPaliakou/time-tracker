@@ -78,10 +78,11 @@ namespace Tracker
             });
 
             // configure DI for application services
-            services.AddSingleton<IMongoContext, NRDbContext>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<INRDbContext, NRDbContext>();
             services.AddScoped<ICardRepository, CardRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IViewCardRepository, ViewCardRepository>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICardAggregate, CardAggregate>();
 
 

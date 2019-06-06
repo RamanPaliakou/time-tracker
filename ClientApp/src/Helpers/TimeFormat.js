@@ -1,4 +1,4 @@
-export const createTimeDiferenceFunction = (value) => () => {
+export const timeDiferenceFunction = (value) => {
 
     const diffTime = value;
 

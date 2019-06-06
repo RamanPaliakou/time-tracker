@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import connect from "react-redux/es/connect/connect";
 
 const LoginPage = function() {
+
   return <Logon alternativeDescription="Don't have an account?" alternativeLink="/register" alternativeClickText="Register"
                 children={<Login />} />;
 };

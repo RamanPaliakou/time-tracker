@@ -16,7 +16,7 @@ namespace Tracker.Web.Data.Entities
 
         [Required]
         public string Title { get; set; }
-        public ImageCardStatus Status { get; set; }
+        public TimeCardStatus Status { get; set; }
 
         public ulong CreatedAt { get; set; }
         public ulong Estimate { get; set; }

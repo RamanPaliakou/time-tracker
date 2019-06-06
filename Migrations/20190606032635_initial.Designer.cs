@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tracker.Data;
 
 namespace Tracker.Web.Migrations
 {
     [DbContext(typeof(RDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190606032635_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,14 +45,10 @@ namespace Tracker.Web.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("Username")
-                        .IsUnique()
-                        .HasFilter("[Username] IS NOT NULL");
-
                     b.ToTable("Users");
 
                     b.HasData(
-                        new { Id = new Guid("21336a83-663a-472f-b716-6ab8c1eb7fb5"), Email = "test@test.com", Fullname = "test", IsInitialized = false, Password = "test", Username = "test" }
+                        new { Id = new Guid("47f6d6fb-23d6-4216-a44b-54b7470b162e"), Email = "test@test.com", Fullname = "test", IsInitialized = false, Password = "test", Username = "test" }
                     );
                 });
 
@@ -59,30 +57,26 @@ namespace Tracker.Web.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<decimal>("CompletedAt")
+                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
+
+                    b.Property<decimal>("CreatedAt")
+                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
                     b.Property<decimal>("Estimate")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
-                    b.Property<decimal>("StartedTime")
+                    b.Property<decimal>("StartedAt")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
                     b.Property<int>("Status");
-
-                    b.Property<decimal>("TimeSpent")
-                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
                     b.Property<string>("Title")
                         .IsRequired();
 
                     b.Property<Guid>("UserId");
 
-                    b.Property<Guid>("VewRecordId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CreationDate")
-                        .IsUnique();
 
                     b.HasIndex("UserId");
 

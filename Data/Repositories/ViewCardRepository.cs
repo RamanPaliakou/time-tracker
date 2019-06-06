@@ -12,7 +12,6 @@ namespace Tracker.Web.Data.Repositories
     public class ViewCardRepository : IViewCardRepository
     {
         private INRDbContext context;
-        private bool disposed = false;
         private IMongoCollection<ViewCard> viewCards;
 
         public ViewCardRepository(INRDbContext context)
@@ -47,29 +46,38 @@ namespace Tracker.Web.Data.Repositories
             viewCards.DeleteOne(x => x.Id == id);
         }
 
-        public void UpdateCreate(Guid id, ViewCard newCard)
+        public void UpdateCreate(ViewCard newCard)
         {
-            if (GetById(id) != null)
-            {
-                var builder = Builders<ViewCard>.Update;
-                var update = builder
-                    .Set(x => x.Title, newCard.Title)
-                    .Set(x => x.Completed, newCard.Completed)
-                    .Set(x => x.Estimate, newCard.Estimate)
-                    .Set(x => x.Started, newCard.Started)
-                    .Set(x => x.TimeSpent, newCard.TimeSpent)
-                    .Set(x => x.StartedTime, newCard.StartedTime)
-                    .Set(x => x.Status, newCard.Status);
-            }
-            else
-            {
-                viewCards.InsertOne(newCard);
-            }
+            //if (GetById(newCard.Id) != null)
+            //{
+            //    var builder = Builders<ViewCard>.Update;
+            //    var update = builder
+            //        .Set(x => x.Title, newCard.Title)
+            //        .Set(x => x.Completed, newCard.Completed)
+            //        .Set(x => x.Estimate, newCard.Estimate)
+            //        .Set(x => x.Started, newCard.Started)
+            //        .Set(x => x.TimeSpent, newCard.TimeSpent)
+            //        .Set(x => x.StartedTime, newCard.StartedTime)
+            //        .Set(x => x.Status, newCard.Status)
+            //        .Set(x => x.CreatedAt, newCard.CreatedAt)
+            //        .Set(x => x.UserId, newCard.UserId);
+            //}
+            //else
+            //{
+            //    viewCards.InsertOne(newCard);
+            //}
+            viewCards.DeleteOne(x => x.Id == newCard.Id);
+            viewCards.InsertOne(newCard);
         }
 
         public IEnumerable<ViewCard> GetAll()
         {
             return viewCards.Find(x => true).ToEnumerable<ViewCard>();
+        }
+
+        public IEnumerable<ViewCard> GetAllByUserId(string userId)
+        {
+            return viewCards.Find(x => x.UserId == userId).ToEnumerable<ViewCard>();
         }
 
         public IEnumerable<ViewCard> GetAllOfStatus(string status)

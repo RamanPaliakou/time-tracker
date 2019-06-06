@@ -3,7 +3,8 @@ import { cardService } from '../Services';
 import { history } from '../Helpers';
 
 export const cardActions = {
-  loadCards
+  loadCards,
+  //loadCardData
 };
 
 function loadCards(email) {
@@ -25,3 +26,22 @@ function loadCards(email) {
   function success(cards) { return { type: cardConstants.LOADCARDS_SUCCESS, cards } }
   function failure() { return { type: cardConstants.LOADCARDS_FAIL } }
 }
+
+// function loadCardData(id, f) {
+//   return dispatch => {
+//
+//     cardService.loadCardData(id)
+//       .then(
+//         data => {
+//           f(data);
+//           console.log('f successfull');
+//           return data;
+//         },
+//         error => {
+//           dispatch(failure(id));
+//         }
+//       );
+//   };
+//
+//   function failure(id) { return { type: cardConstants.LOADCARDDATA_ERROR, id } }
+// }

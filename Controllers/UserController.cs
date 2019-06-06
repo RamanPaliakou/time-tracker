@@ -16,7 +16,7 @@ namespace WebApi.Controllers
         private IUserService UserService;
         private ICardAggregate CardAggregate;
 
-        public UsersController(IUserService userService, IMongoContext mc, ICardAggregate cardAggregate)
+        public UsersController(IUserService userService, ICardAggregate cardAggregate)
         {
             UserService = userService;
             CardAggregate = cardAggregate;
@@ -26,10 +26,14 @@ namespace WebApi.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]User userParam)
         {
-            var user= UserService.Authenticate(userParam.Email.ToLower(), userParam.Password);
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+            var email = userParam.Email.ToLower();
+            var isValid = UserService.Authorize(email, userParam.Password);
+            var isNotInitialized = !UserService.VerifyInitialization(email);
 
+            if (!isValid) return BadRequest(new { message = "Username or password is incorrect" });
+            if (isValid && isNotInitialized) CardAggregate.InitCardsForUser(email);
+                
+            var user = UserService.Authenticate(userParam.Email.ToLower(), userParam.Password);                
             return Ok(user);
         }
 
@@ -37,10 +41,15 @@ namespace WebApi.Controllers
         [HttpPost("register")]
         public IActionResult Register([FromBody]User userParam)
         {
-            var user = UserService.Register(userParam.Email.ToLower(), userParam.Password, userParam.Fullname, userParam.Username);
-            if (user == null)
-                return BadRequest(new { message = "Not all fields are valid" });
-            CardAggregate.InitCardsForUser(userParam.Email.ToLower());
+            var email = userParam.Email.ToLower();
+            UserService.TryRegister(email, userParam.Password, userParam.Fullname, userParam.Username);
+
+            
+            var isValid = UserService.Authorize(email, userParam.Password);
+            var isNotInitialized = !UserService.VerifyInitialization(email);
+            if (isValid && isNotInitialized) CardAggregate.InitCardsForUser(email);
+
+            var user = UserService.Authenticate(userParam.Email.ToLower(), userParam.Password);
             return Ok(user);
         }
 

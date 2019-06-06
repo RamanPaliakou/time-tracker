@@ -17,118 +17,141 @@ import WorkOff from '@material-ui/icons/WorkOff';
 import DirectionsRun from '@material-ui/icons/DirectionsRun';
 import Delete from '@material-ui/icons/Delete';
 import Summary from '../_subsidiary/Summary';
-import {createCardCreationFunction} from '../../Helpers';
+import {connect} from "react-redux";
+import spinner from '../../Resources/Images/spinner.gif'
+import {cardService} from "../../Services/CardServices";
 
-class TimeCard extends Component {
+class TimeCardUI extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state ={
       id: props.id,
-      title: props.title || 'Title',
-      status: props.status || 'waiting',
-      value: 0,
-      timePassed: 0,
-      timeSpent: props.timeSpent || 0,
-      startedTime: props.startedTime || 0,
-      completed: (typeof props.completed !== "undefined") ? props.completed : false,
-      started: (typeof props.started !== "undefined") ? props.started : false,
-      estimate: (typeof props.estimate !== "undefined") ? props.estimate : 0,
+      cardData:{},
+      view: 0, //value for swipeable view
+      isLoaded: false,
+      isDisplayed: true
     };
   }
 
-  increaseChange = () => {
-    if (this.state.value === 1)
-      this.setState({ value: 0 })
+  forward = () => {
+    if (this.state.view === 1)
+      this.setState({ view: 0 })
     else
-      this.setState({ value: this.state.value + 1 })
+      this.setState({ view: this.state.view + 1 })
   }
 
-  dereaseChange = () => {
-    if (this.state.value === 0)
-      this.setState({ value: 1 })
+  backward = () => {
+    if (this.state.view === 0)
+      this.setState({ view: 1 })
     else
-      this.setState({ value: this.state.value - 1 })
+      this.setState({ view: this.state.view - 1 })
   }
 
   setTimePassed = (value) => () => {
-    this.setState({ timePassed: value });
-  }
-
-  displayTimePassed = () => {
-    console.log('Function is not asssigned on this button. Displaying current time state')
-    console.log(this.state.timePassed)
-  }
-
-  createCardAction = (func) => {
-    console.log('start card timeCard', this.state, this.props);
-    const card = createCardCreationFunction(this.state)();
-      func(card)(); 
-  }
-  startCard = () => {
-    const card = createCardCreationFunction(this.state)();
-    this.props.startCard(card)(); 
-  }
-
-  completeCard = () => {
-    const card = createCardCreationFunction(this.state)();
-    this.props.completeCard(card)(); 
-  }
-
-  deleteCard = () => {
-      const card = createCardCreationFunction(this.state)();
-      this.props.deleteCard(card)(); 
-  }
+    var cardData = {
+      ...this.state.cardData,
+      timePassed: value
+    };
+    this.setState({ cardData: cardData });
+  };
 
   Icon = {
     inProgress: <DirectionsRun />,
     waiting: <HourglassEmptyTwoTone />,
     completed: <CheckCircleOutlineTwoTone />,
     badEstimated: <AlarmOffTwoTone />
-  }
+  };
 
-  Title = (props) => {
-    return (
-      <div className={this.props.title} styles={{}} >
-        <Typography variant="h4" gutterBottom styles={{ margin: 'auto 0' }}
-          children={
-            props.title}
-        />
-      </div>
-    )
-  }
+  getData = () => {
+    const id = this.props.id;
 
-  componentWillReceiveProps(nextProps) {
-    const newState = {
-      id: nextProps.id,
-      title: nextProps.title || this.state.title,
-      status: nextProps.status || this.state.status,
-      value: 0,
-      timePassed: this.state.timePassed,
-      timeSpent: nextProps.timeSpent || this.state.timeSpent,
-      startedTime: nextProps.startedTime || this.state.startedTime,
-      completed:  nextProps.completed || this.state.completed,
-      started: nextProps.started || this.state.started,
-      estimate: nextProps.estimate || this.state.estimate,
+    return new Promise((resolve, reject) => {
+      var data = cardService.loadCardData(id);
+      resolve(data);
+    }).then(data => this.setState({cardData: data, isLoaded: true}));
+  };
+
+  deleteCard = () => {
+    var id = this.state.cardData.id;
+    return new Promise((resolve, reject) => {
+      var data = cardService.deleteCard(id);
+      resolve(data);
+    }).then(data => this.setState({isDisplayed: false}));
+  };
+
+  startCard = () => {
+    if (!this.state.cardData.started) {
+      const cardToUpdate = {
+        ...this.state.cardData,
+        started: true,
+        completed: false,
+        startedTime: new Date().getTime(),
+        timeSpent: 0,
+        status: 'inProgress',
+      };
+
+      return new Promise((resolve, reject) => {
+        var data = cardService.updateCard(cardToUpdate);
+        resolve();
+      }).then(this.setState({cardData: cardToUpdate, isLoaded: true}));
     }
-    this.setState(newState);
-  }
+  };
+
+  completeCard = () => {
+    const card = this.state.cardData;
+    if (!card.completed && card.started) {
+
+      const cardToUpdate = {
+        ...card,
+        started: true,
+        completed: true,
+        startedTime: card.startedTime,
+        timeSpent: card.timePassed,
+        status: (card.timeSpent > card.estimate) ? 'badEstimated' : 'completed',
+      };
+
+      return new Promise((resolve, reject) => {
+        var data = cardService.updateCard(cardToUpdate);
+        resolve();
+      }).then(this.setState({cardData: cardToUpdate, isLoaded: true}));
+    }
+  };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const stateExNow = JSON.stringify({ ...this.state, timePassed: '' });
-    const stateExNew = JSON.stringify({ ...nextState, timePassed: '' });
+    var cardData = this.state.cardData;
+    cardData = {
+      ...cardData, timePassed: ''
+    };
 
-    if (stateExNow == stateExNew && this.props == nextProps) return false;
+    var cardDataNew = nextState.cardData;
+    cardDataNew = {
+      ...cardDataNew, timePassed: ''
+    };
+
+    const stateNow = JSON.stringify({...this.state, cardData: cardData});
+    const stateNew = JSON.stringify({...nextState, cardData: cardDataNew});
+
+    if (stateNow == stateNew && this.props == nextProps) return false;
     return true;
+  }
+
+  componentDidMount() {
+    setInterval(()=>
+    {
+      if (!this.state.isLoaded) this.getData();
+    }, 3000)
   }
 
   render() {
     const { classes } = this.props;
-    const { title, status, completed, started, startedTime, estimate, timeSpent } = this.state;    
+    const { isLoaded, view, isDisplayed } = this.state;
+    const {title, status, completed, started, startedTime, estimate, timeSpent} = this.state.cardData;
+
     const HorizontalMenuFields =
       [
         {
           text: 'back',
-          callback: this.dereaseChange,
+          callback: this.backward,
           iconComponent: <ArrowLeft />,
           collapseAt: appConstants.applySmallWidth,
         },
@@ -152,30 +175,40 @@ class TimeCard extends Component {
         },
         {
           text: 'forward',
-          callback: this.increaseChange,
+          callback: this.forward,
           iconComponent: <ArrowRight />,
           collapseAt: appConstants.applySmallWidth,
         }
       ];
+
+    const summaryValuesCorrect = typeof(timeSpent) !== "undefined";
+
     return (
-      <Paper className={classes.paper}>
+    <div className={classes.paper}>
+      {isDisplayed && <Paper >
         <div className={classes.formatPaper}>
 
           <div className={classes.formatViewData}>
-            <Avatar className={classes.statusIcon} children={
-              this.Icon[status]} />
+            <Avatar className={classes.statusIcon}>
+              {!isLoaded && <img className={classes.statusIcon} src={spinner}/>}
+              {isLoaded && this.Icon[status]}
+            </Avatar>
 
-            <div className={classes.divider} />
+            <div className={classes.divider}/>
 
             <div className={classes.contentArea} children={
-              <SwipeableViews className={classes.swipeableViews} axis={'x'} index={this.state.value}>
+              <SwipeableViews className={classes.swipeableViews} axis={'x'} index={this.state.view}>
                 <div className={classes.tabElement} children={
-                  <this.Title title={title} />}
+                  <div className={classes.title}>
+                    <Typography variant="h4" gutterBottom styles={{margin: 'auto 0'}}
+                                children={title}
+                    />
+                  </div>}
                 />
                 <div className={classes.tabElement} children={
-                  <Summary isActive={(this.state.value === 1)} timeSpent={timeSpent}
-                    callbackTimePassed={this.setTimePassed} estimate={estimate}
-                    startedTime={startedTime} started={started} completed={completed} />}
+                  <Summary isActive={(view === 1)} timeSpent={timeSpent} valuesCorrect={summaryValuesCorrect}
+                           callbackTimePassed={this.setTimePassed} estimate={estimate}
+                           startedTime={startedTime} started={started} completed={completed}/>}
                 />
               </SwipeableViews>}
             />
@@ -183,13 +216,30 @@ class TimeCard extends Component {
           </div>
 
           <HorizontalMenu className={classes.menu} buttonsArray={HorizontalMenuFields}
-            customHeight={22} customFontSize={7} textTransform={'lowercase'} enableSelection={false}
+                          customHeight={22} customFontSize={7} textTransform={'lowercase'} enableSelection={false}
           />
         </div>
-      </Paper >
+      </Paper>}
 
+      {!isDisplayed && <Paper className = {classes.smallPaper}>
+        <div className={classes.centralizer}>
+          Card was deleted
+        </div>
+      </Paper>}
+    </div>
     );
   }
 }
+
+function mapStateToProps(state) {
+  const {cards} = state;
+  const {loadedCards, loadCardsOk} = cards;
+  return {
+    loadedCards,
+    loadCardsOk
+  };
+}
+
+const TimeCard = connect(mapStateToProps)(TimeCardUI);
 
 export default withStyles(styles)(TimeCard);

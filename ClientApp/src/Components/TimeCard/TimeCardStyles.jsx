@@ -10,6 +10,13 @@ const styles = (theme) => {
         height: 100,
         marginBottom: 10,
       },
+      smallPaper: {
+        maxWidth: 435,
+        width: '100%',
+        minWidth: appConstants.minAppWidth,
+        height: 20,
+        marginBottom: 10,
+      },
       formatPaper: {
         height: '100%',
         minWidth: appConstants.minAppWidth,
@@ -56,8 +63,8 @@ const styles = (theme) => {
         width: 2,
         margin: '0 3px 0 3px'
       },
-      test: {
-        width: '100%'
+      centralizer: {
+        textAlign: 'center'
       },
       title: {
         display: 'flex',

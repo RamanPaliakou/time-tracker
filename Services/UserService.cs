@@ -9,47 +9,52 @@ using System.Text;
 using Tracker.Data.Entities;
 using Tracker.Helpers;
 using Tracker.Web.Data.Aggregates;
+using Tracker.Web.Data.Interfaces;
 
 namespace Tracker.Services
 {
-    public interface IUserService
-    {
-        User Authenticate(string email, string password);
-        User Register(string email, string password, string fullName, string username);
-        IEnumerable<User> GetAll();
-    }
-
     public class UserService : IUserService
     {
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private List<User> _users = new List<User>
-        {
-            new User { Id = Guid.NewGuid(), Email = "test@test.com", Fullname = "User User", Username = "test", Password = "test" }
-        };
-
         private readonly AppSettings _appSettings;
+        private IUserRepository Users;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public UserService(IOptions<AppSettings> appSettings, IUserRepository users)
         {
             _appSettings = appSettings.Value;
+            Users = users;
         }
 
         public User Authenticate(string email, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Email == email && x.Password == password);
+            var user = Users.GetUserByEmail(email);
+            if (user == null) return null;
 
-            // return null if user not found
-            if (user == null)
-                return null;
-
-            // authentication successful so generate jwt token
-            return GenerateToken(user);
+            if (user.Password == password)
+                return GenerateToken(user);
+            else return null;
         }
 
-        public User Register(string email, string password, string fullname, string username)
+        public bool Authorize(string email, string password)
+        {
+            var user = Users.GetUserByEmail(email);
+            if (user == null) return false;
+
+            if (user.Password == password)
+                return true;
+            else return false;
+        }
+
+        public bool VerifyInitialization(string email)
+        {
+            var user = Users.GetUserByEmail(email);
+            if (user == null) return false;
+            return user.IsInitialized;
+        }
+
+        public void TryRegister(string email, string password, string fullname, string username)
         {
             var badUser = (email == null || password == null);
-            if (badUser) return null;
+            if (badUser) return;
 
             var user = new User
             {
@@ -59,20 +64,7 @@ namespace Tracker.Services
                 Fullname = fullname,
                 Username = username
             };
-
-            _users.Add(user);
-
-            return GenerateToken(user);
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            // return users without passwords
-            return _users.Select(x =>
-            {
-                x.Password = null;
-                return x;
-            });
+            Users.AddUser(user);
         }
 
         private User GenerateToken(User user)
@@ -91,10 +83,11 @@ namespace Tracker.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             user.Token = tokenHandler.WriteToken(token);
 
-            // remove password before returning
             user.Password = null;
 
             return user;
         }
+
+
     }
 }

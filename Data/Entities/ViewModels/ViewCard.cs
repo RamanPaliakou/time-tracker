@@ -17,6 +17,12 @@ namespace Tracker.Web.Data.Entities
         public ulong Estimate { get; set; }
         [BsonElement("timeSpent")]
         public ulong TimeSpent { get; set; }
+        [BsonElement("timePassed")]
+        public ulong TimePassed { get; set; }
+        [BsonElement("createdAt")]
+        public ulong CreatedAt { get; set; }
+        [BsonElement("userId")]
+        public string UserId { get; set; }
         [BsonElement("status")]
         public string Status { get; set; }
         [BsonElement("startedTime")]

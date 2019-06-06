@@ -17,10 +17,6 @@ namespace Tracker.Web.Data.Seeding
             builder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
-
-            builder.Entity<User>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
         }
 
         public static void SeedUsers(this ModelBuilder builder)
