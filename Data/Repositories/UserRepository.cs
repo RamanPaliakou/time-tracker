@@ -10,10 +10,10 @@ namespace Tracker.Web.Data.Repositories
 {
     public class UserRepository : IUserRepository, IDisposable
     {
-        private ApplicationDbContext context;
+        private RDbContext context;
         private bool disposed = false;
 
-        public UserRepository(ApplicationDbContext context)
+        public UserRepository(RDbContext context)
         {
             this.context = context;
         }

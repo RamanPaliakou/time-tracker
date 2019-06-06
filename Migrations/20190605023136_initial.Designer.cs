@@ -9,7 +9,7 @@ using Tracker.Data;
 
 namespace Tracker.Web.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(RDbContext))]
     [Migration("20190605023136_initial")]
     partial class initial
     {

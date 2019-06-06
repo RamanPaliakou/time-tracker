@@ -35,7 +35,7 @@ namespace Tracker
         {
             MongoDbCreator.CreateDbInstance(Configuration.GetValue<string>("MongoInstancePath"), Configuration.GetValue<int>("MongoInstancePort"));
 
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<RDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
              
             services.AddCors(x => x.AddPolicy("Default", builder =>
             {
@@ -78,7 +78,7 @@ namespace Tracker
             });
 
             // configure DI for application services
-            services.AddSingleton<IMongoContext, MongoDbContext>();
+            services.AddSingleton<IMongoContext, NRDbContext>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICardRepository, CardRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

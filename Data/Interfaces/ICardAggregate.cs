@@ -8,9 +8,9 @@ namespace Tracker.Web.Data.Interfaces
 {
     public interface ICardAggregate
     {
-        void CreateCard(string title, string estimate, string email);
+        void CreateCard(string title, string estimate, string createdAt, string email);
 
-        IEnumerable<Card> GetCardsToDisplay(string email);
+        IEnumerable<Card> GetCardsByEmail(string email);
 
         void InitCardsForUser(string email);
     }

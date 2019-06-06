@@ -21,10 +21,6 @@ namespace Tracker.Web.Data.Seeding
             builder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
-
-            builder.Entity<Card>()
-                .HasIndex(u => u.CreationDate)
-                .IsUnique();
         }
 
         public static void SeedUsers(this ModelBuilder builder)
@@ -42,9 +38,5 @@ namespace Tracker.Web.Data.Seeding
             builder.Entity<User>().HasData(user);
         }
 
-        public static void SeedCards(this ModelBuilder builder)
-        {
-
-        }
     }
 }

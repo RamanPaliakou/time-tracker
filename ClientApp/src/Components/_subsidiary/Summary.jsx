@@ -10,6 +10,7 @@ class Summary extends Component {
         this.state = {
             currentDisplay: '0',
             startedTime: this.props.startedTime || new Date().getTime(),
+            status: props.status || "waiting",
             completed: (typeof props.completed !== "undefined") ? props.completed : false,
             started: (typeof props.started !== "undefined") ? props.started : false,
             estimate: (typeof props.estimate !== "undefined") ? props.estimate : 0,
@@ -58,8 +59,10 @@ class Summary extends Component {
     }
 
     render() {
-        const { currentDisplay, completed, estimate } = this.state;
-        const { timeSpent } = this.props;
+        const { currentDisplay, estimate } = this.state;
+        const { timeSpent, status } = this.props;
+
+        const completed = (status === "completed" || status === "badEstimated");
         const estimatedTime = createTimeDiferenceFunction(estimate);
         return (
             <div className={this.props.summary} styles={{}} >

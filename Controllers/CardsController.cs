@@ -6,6 +6,7 @@ using Tracker.Web.Data.Interfaces;
 using System;
 using MongoDB.Driver;
 using Microsoft.AspNetCore.Cors;
+using Tracker.Web.Data.Entities;
 
 namespace WebApi.Controllers
 {   [Authorize]
@@ -24,8 +25,36 @@ namespace WebApi.Controllers
         [HttpPost("getcards")]
         public IActionResult GetCards([FromBody]string email)
         {
-            var cards = CardAggregate.GetCardsToDisplay(email);
+            var cards = CardAggregate.GetCardsByEmail(email);
             return Ok(cards);
+        }
+
+        [HttpPost("updatecard")]
+        public IActionResult UpdateCard([FromBody]ViewCard vc)
+        {
+
+            return Ok();
+        }
+
+        [HttpPost("deletecard")]
+        public IActionResult DeleteCard([FromBody]ViewCard vc)
+        {
+
+            return Ok();
+        }
+
+        [HttpPost("getcarddetail")]
+        public IActionResult GetCardDetail([FromBody]ViewCard vc)
+        {
+
+            return Ok();
+        }
+
+        [HttpPost("getcarddetail")]
+        public IActionResult CreateCard([FromBody]ViewCard vc)
+        {
+
+            return Ok();
         }
 
         [AllowAnonymous]

@@ -7,10 +7,9 @@ using Tracker.Web.Data.Entities;
 
 namespace Tracker.Web.Data.Interfaces
 {
-    public interface IMongoContext
+    public interface INRDbContext
     {
         MongoClient Client { get; }
-        IMongoDatabase Database { get; }
-        IMongoCollection<ViewCard> Cards { get; }
+        IMongoDatabase Db { get; }
     }
 }

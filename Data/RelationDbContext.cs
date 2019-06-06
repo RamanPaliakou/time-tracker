@@ -10,13 +10,14 @@ using Tracker.Web.Data.Seeding;
 
 namespace Tracker.Data
 {
-    public class ApplicationDbContext : DbContext
+    // Non-Relational Database Context
+    public class RDbContext : DbContext
     {
-        public ApplicationDbContext()
+        public RDbContext()
         {
         }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public RDbContext(DbContextOptions<RDbContext> options) : base(options)
         {
         }
 
@@ -28,7 +29,6 @@ namespace Tracker.Data
         {
             builder.AddConstraints();
             builder.SeedUsers();
-            builder.SeedCards();
         }
     }
 }

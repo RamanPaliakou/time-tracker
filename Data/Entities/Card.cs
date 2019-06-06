@@ -13,19 +13,20 @@ namespace Tracker.Web.Data.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid VewRecordId { get; set; }
+
         [Required]
         public string Title { get; set; }
         public ImageCardStatus Status { get; set; }
-        public ulong TimeSpent { get; set; }
-        public ulong Estimate { get; set; }
-        public  ulong StartedTime { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public ulong CreatedAt { get; set; }
+        public ulong Estimate { get; set; }
+        public  ulong StartedAt { get; set; }
+        public ulong CompletedAt { get; set; }
 
         [ForeignKey("User")]
         public Guid UserId { get; set; }
-
         public virtual User User { get; set; }
+
+
     }
 }

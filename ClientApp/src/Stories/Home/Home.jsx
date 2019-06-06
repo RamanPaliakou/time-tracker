@@ -23,7 +23,7 @@ class HomePage extends React.PureComponent {
       ModifyProfileModalIsOpen: false,
       area: 'completed'
     };
-    this.verifyActiveUser();
+    //this.verifyActiveUser();
   }
 
   logout = () => {

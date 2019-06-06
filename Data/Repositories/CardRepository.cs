@@ -12,10 +12,10 @@ namespace Tracker.Web.Data.Repositories
 {
     public class CardRepository : ICardRepository, IDisposable
     {
-        private ApplicationDbContext context;
+        private RDbContext context;
         private bool disposed = false;
 
-        public CardRepository(ApplicationDbContext context)
+        public CardRepository(RDbContext context)
         {
             this.context = context;
         }
@@ -63,12 +63,11 @@ namespace Tracker.Web.Data.Repositories
                   Id = cu.c.Id,
                   UserId = cu.c.UserId,
                   Title = cu.c.Title,
-                  TimeSpent = cu.c.TimeSpent,
+                  CreatedAt = cu.c.CreatedAt,
                   Status = cu.c.Status,
-                  StartedTime = cu.c.StartedTime,
+                  StartedAt = cu.c.StartedAt,
                   Estimate = cu.c.Estimate,
-                  CreationDate = cu.c.CreationDate,
-                  VewRecordId = cu.c.VewRecordId,
+                  CompletedAt = cu.c.CompletedAt
               })
               .AsEnumerable<Card>();
         }

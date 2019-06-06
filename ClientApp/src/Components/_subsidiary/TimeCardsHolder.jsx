@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TimeCard from '../TimeCard/TimeCard';
-import {appConstants} from '../../Constants';import { statusGroups } from '../../Constants/StatusGroups';
+import {appConstants, statusGroups} from '../../Constants';
 import spinner from '../../Resources/Images/spinner.gif'
 import { getTimeCards } from '../../Helpers/MockData';
 import {cardActions} from "../../Actions";
@@ -46,7 +46,17 @@ class TimeCardsHolderUI extends PureComponent {
     }
 
     applyCards = () => {
-        // let sg = statusGroups[this.props.statusGroup];
+        let sg = this.props.statusGroup;
+        let setState = this.setState;
+        if (sg==statusGroups.active)
+        {
+            var p = new Promise((resolve,reject)=>{
+             resolve getTimeCards("active") ;
+            });
+            p.then(gcards=>{setState({cards: gcards})})
+              .then(()=>{resolve getTimeCards("active")})
+        }
+
         // const dispatch = this.props.dispatch;
         //
         // const setState = this.setState.bind(this);
@@ -60,6 +70,7 @@ class TimeCardsHolderUI extends PureComponent {
         // });
         //     get.then(x => x.filter( x => sg.includes(x.status) ))
         //         .then(x=> setState({cards:x, isLoaded: true}));
+
     }
 
     startCardCreate = (card) => () => {
@@ -105,10 +116,6 @@ class TimeCardsHolderUI extends PureComponent {
             (el.id !== card.id));
         console.log(this.state, newCards);
         this.setState({ ...this.state, cards: newCards });
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-
     }
 
     componentDidMount() {
